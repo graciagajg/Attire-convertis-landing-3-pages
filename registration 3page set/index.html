@@ -2536,13 +2536,29 @@
     });
   });
 
-  // Form submit placeholder (Kit integration to be wired later)
+  // Form submit — relays to Kit via Cloudflare Function, then redirects.
+  // Redirect happens whether the Kit call succeeds or fails: a failed
+  // call is logged server-side (see functions/api/subscribe.js), so a
+  // network blip never blocks or confuses the visitor.
   document.querySelector("form").addEventListener("submit", function(e){
     e.preventDefault();
     if(window.itiTelInstance && itiTelInstance.isValidNumber && itiTelInstance.isValidNumber()){
       document.getElementById("tel").value = itiTelInstance.getNumber();
     }
-    alert("Formulaire prêt à être connecté à Kit. Intégration à venir.");
+
+    const nom = document.getElementById("nom").value;
+    const email = document.getElementById("email").value;
+    const tel = document.getElementById("tel").value;
+
+    fetch("/api/subscribe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nom, email, tel })
+    })
+      .catch(err => console.error("Subscribe request failed:", err))
+      .finally(() => {
+        window.location.href = "merci.html";
+      });
   });
 </script>
 
