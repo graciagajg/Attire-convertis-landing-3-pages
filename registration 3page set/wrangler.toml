@@ -6,3 +6,10 @@ compatibility_date = "2026-08-08"
 directory = "."
 binding = "ASSETS"
 
+[[kv_namespaces]]
+binding = "FAILED_SUBSCRIBERS"
+id = "a1f382b93729413c80f8e1692a4f1806"
+
+[[kv_namespaces]]
+binding = "CHECKOUT_LEADS"
+id = "257ae505c96c4d47bc74c3ffdc3122e7"
