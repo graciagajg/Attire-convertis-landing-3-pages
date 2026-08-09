@@ -13,10 +13,50 @@ export default {
       return handleSubscribe(request, env);
     }
 
+    if (url.pathname === "/api/capture-lead" && request.method === "POST") {
+      return handleCaptureLead(request, env);
+    }
+
     // Not an API request — serve the matching static file as usual.
     return env.ASSETS.fetch(request);
   }
 };
+
+// Logs a checkout lead (name, email, phone, chosen plan) to KV before the
+// visitor is sent to Whop. This is a manual cross-check log, not an
+// automated payment-matching system — see the offre.html handler for
+// how it's used. Never blocks the redirect to Whop.
+async function handleCaptureLead(request, env) {
+  let data;
+  try {
+    data = await request.json();
+  } catch (err) {
+    return jsonResponse({ ok: false, error: "invalid_json" }, 400);
+  }
+
+  const { nom, email, tel, plan } = data;
+
+  if (!email || !nom) {
+    return jsonResponse({ ok: false, error: "missing_fields" }, 400);
+  }
+
+  if (!env.CHECKOUT_LEADS) {
+    // Binding not set up yet — don't block checkout over a logging gap.
+    return jsonResponse({ ok: true, logged: false });
+  }
+
+  const key = `lead:${Date.now()}:${email}`;
+  try {
+    await env.CHECKOUT_LEADS.put(key, JSON.stringify({
+      nom, email, tel, plan,
+      at: new Date().toISOString()
+    }));
+    return jsonResponse({ ok: true, logged: true });
+  } catch (err) {
+    // Logging failed, but don't block the visitor's checkout over it.
+    return jsonResponse({ ok: true, logged: false });
+  }
+}
 
 async function handleSubscribe(request, env) {
   let data;

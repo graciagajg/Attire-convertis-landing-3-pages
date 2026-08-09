@@ -2857,13 +2857,27 @@
       document.getElementById("m-tel").value = itiTelInstanceModal.getNumber();
     }
     const url = selectedPlan === "full" ? WHOP_CHECKOUT_FULL : WHOP_CHECKOUT_SPLIT;
-    // TODO (Gracia): before the redirect, this is where the Kit submission for the lead
-    // (name/email/phone) would fire, same as the Kit integration placeholder on page 1.
     if(!url){
       alert("Lien de paiement Whop à venir : ajoute l'URL de checkout dans le code une fois le produit configuré sur Whop.");
       return;
     }
-    window.location.href = url;
+
+    const nom = document.getElementById("m-nom").value;
+    const email = document.getElementById("m-email").value;
+    const tel = document.getElementById("m-tel").value;
+
+    // Log this lead before sending to Whop, so you can manually cross-check
+    // against Whop's own purchase list later. Never blocks the redirect —
+    // if this call fails or is slow, the visitor still reaches checkout.
+    fetch("/api/capture-lead", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nom, email, tel, plan: selectedPlan })
+    })
+      .catch(err => console.error("Lead capture failed:", err))
+      .finally(() => {
+        window.location.href = url;
+      });
   });
 </script>
 
