@@ -1,0 +1,20 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Elizabeth Kikumbi//Attire et Convertis//FR
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:masterclass-28-aout-2026-attireconvertis@elizakikumbi.com
+DTSTAMP:20260809T000000Z
+DTSTART:20260828T180000Z
+DTEND:20260828T193000Z
+SUMMARY:Deviens la femme à qui on achète - masterclass avec Elizabeth Kikumbi
+DESCRIPTION:Masterclass en direct : le système complet pour transformer ta présence en ligne en clientes qui achètent. On couvre l'identité qui attire les bonnes personnes et le contenu qui convertit. 90 minutes avec Elizabeth.
+LOCATION:https://us06web.zoom.us/j/89062857302
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:Ta masterclass avec Elizabeth commence dans 30 minutes
+END:VALARM
+END:VEVENT
+END:VCALENDAR
