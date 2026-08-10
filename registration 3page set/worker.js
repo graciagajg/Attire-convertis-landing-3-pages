@@ -85,30 +85,91 @@ async function handleSubscribe(request, env) {
     }
   };
 
-  try {
-    // Step 1: create or update the subscriber, with fields (name, phone)
-    await callKitWithRetry(
-      "https://api.kit.com/v4/subscribers",
-      apiKey,
-      subscriberBody
-    );
+  // Kit and Brevo fire in parallel. allSettled means neither one can
+  // block or break the other — a Brevo failure never turns a working
+  // Kit registration into an error, and vice versa.
+  const [kitResult, brevoResult] = await Promise.allSettled([
+    subscribeToKit(apiKey, formId, subscriberBody),
+    subscribeToBrevo(env, { nom, email, tel })
+  ]);
 
-    // Step 2: attach that subscriber to the form (this is what fires
-    // whatever automation is wired to the form in Kit)
-    await callKitWithRetry(
-      `https://api.kit.com/v4/forms/${formId}/subscribers`,
-      apiKey,
-      { email_address: email }
-    );
-
-    return jsonResponse({ ok: true });
-
-  } catch (err) {
+  if (kitResult.status === "rejected") {
     // Kit rejected the request (or was unreachable) after a retry.
     // Log everything we have so this person isn't silently lost.
-    await logFailure(env, { nom, email, tel, error: err.message, at: new Date().toISOString() });
+    await logFailure(env, {
+      source: "kit",
+      nom, email, tel,
+      error: kitResult.reason.message,
+      at: new Date().toISOString()
+    });
+  }
+
+  if (brevoResult.status === "rejected") {
+    await logFailure(env, {
+      source: "brevo",
+      nom, email, tel,
+      error: brevoResult.reason.message,
+      at: new Date().toISOString()
+    });
+  }
+
+  // Kit is the system this flow was originally built around, so its
+  // outcome still drives the response code the form sees. Brevo
+  // failing quietly never blocks or breaks the registration itself.
+  if (kitResult.status === "rejected") {
     return jsonResponse({ ok: false, error: "kit_failed" }, 502);
   }
+
+  return jsonResponse({ ok: true });
+}
+
+// Wraps the two-step Kit call (create/update subscriber, then attach
+// to the form — the form attachment is what fires whatever automation
+// is wired to it in Kit) so it can run inside Promise.allSettled above.
+async function subscribeToKit(apiKey, formId, subscriberBody) {
+  await callKitWithRetry(
+    "https://api.kit.com/v4/subscribers",
+    apiKey,
+    subscriberBody
+  );
+
+  await callKitWithRetry(
+    `https://api.kit.com/v4/forms/${formId}/subscribers`,
+    apiKey,
+    { email_address: subscriberBody.email_address }
+  );
+}
+
+// Creates or updates the Brevo contact and adds them to the SMS
+// reminder list (BREVO_LIST_ID). updateEnabled:true means a second
+// registration from the same person updates the existing contact
+// instead of throwing a duplicate-contact error.
+async function subscribeToBrevo(env, { nom, email, tel }) {
+  if (!env.BREVO_API_KEY || !env.BREVO_LIST_ID) {
+    throw new Error("Brevo env vars not configured");
+  }
+
+  const res = await fetch("https://api.brevo.com/v3/contacts", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "api-key": env.BREVO_API_KEY
+    },
+    body: JSON.stringify({
+      email: email,
+      attributes: {
+        [env.BREVO_FIRSTNAME_KEY || "FIRSTNAME"]: nom,
+        SMS: tel || ""
+      },
+      listIds: [parseInt(env.BREVO_LIST_ID, 10)],
+      updateEnabled: true
+    })
+  });
+
+  if (res.ok) return res.json();
+
+  const errText = await res.text();
+  throw new Error(`Brevo ${res.status}: ${errText}`);
 }
 
 // Calls Kit's API. Retries once on transient errors (429 rate limit,
