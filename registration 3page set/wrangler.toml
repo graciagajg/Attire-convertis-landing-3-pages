@@ -13,3 +13,7 @@ id = "a1f382b93729413c80f8e1692a4f1806"
 [[kv_namespaces]]
 binding = "CHECKOUT_LEADS"
 id = "257ae505c96c4d47bc74c3ffdc3122e7"
+
+[vars]
+KIT_FORM_ID = "9780376"
+PHONE_FIELD_KEY = "phone_number"
