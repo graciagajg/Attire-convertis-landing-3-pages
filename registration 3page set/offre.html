@@ -2855,8 +2855,21 @@
     e.preventDefault();
     if(window.itiTelInstanceModal && itiTelInstanceModal.getNumber){
       const formattedNumber = itiTelInstanceModal.getNumber();
-      if(formattedNumber){
+      if(formattedNumber && formattedNumber.charAt(0) === "+"){
+        // getNumber() succeeded and returned a proper E.164 number.
         document.getElementById("m-tel").value = formattedNumber;
+      } else {
+        // getNumber() rejected the number (stale library metadata for
+        // this country, e.g. Benin's post-Nov-2024 10-digit format) and
+        // fell back to returning the raw typed value. Manually prepend
+        // the dial code so the number still has a country code, without
+        // stripping any digits — safer for numbering plans the library
+        // doesn't yet recognize.
+        const rawDigits = document.getElementById("m-tel").value.replace(/\D/g, "");
+        const countryData = itiTelInstanceModal.getSelectedCountryData ? itiTelInstanceModal.getSelectedCountryData() : null;
+        if(rawDigits && countryData && countryData.dialCode){
+          document.getElementById("m-tel").value = "+" + countryData.dialCode + rawDigits;
+        }
       }
     }
     const url = selectedPlan === "full" ? WHOP_CHECKOUT_FULL : WHOP_CHECKOUT_SPLIT;
