@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -2542,8 +2543,24 @@
   // network blip never blocks or confuses the visitor.
   document.querySelector("form").addEventListener("submit", function(e){
     e.preventDefault();
-    if(window.itiTelInstance && itiTelInstance.isValidNumber && itiTelInstance.isValidNumber()){
-      document.getElementById("tel").value = itiTelInstance.getNumber();
+    if(window.itiTelInstance && itiTelInstance.getNumber){
+      const formattedNumber = itiTelInstance.getNumber();
+      if(formattedNumber && formattedNumber.charAt(0) === "+"){
+        // getNumber() succeeded and returned a proper E.164 number.
+        document.getElementById("tel").value = formattedNumber;
+      } else {
+        // getNumber() rejected the number (stale library metadata for
+        // this country, e.g. Benin's post-Nov-2024 10-digit format) and
+        // fell back to returning the raw typed value. Manually prepend
+        // the dial code so the number still has a country code, without
+        // stripping any digits — safer for numbering plans the library
+        // doesn't yet recognize.
+        const rawDigits = document.getElementById("tel").value.replace(/\D/g, "");
+        const countryData = itiTelInstance.getSelectedCountryData ? itiTelInstance.getSelectedCountryData() : null;
+        if(rawDigits && countryData && countryData.dialCode){
+          document.getElementById("tel").value = "+" + countryData.dialCode + rawDigits;
+        }
+      }
     }
 
     const nom = document.getElementById("nom").value;
@@ -4781,7 +4798,40 @@ k("intlTelInputUtils.numberFormat",{E164:0,INTERNATIONAL:1,NATIONAL:2,RFC3966:3}
 <script>
   window.itiTelInstance = window.intlTelInput(document.getElementById("tel"), {
     initialCountry: "ca",
-    preferredCountries: ["ca","fr","be","ch","lu","mc","sn","ci","cd","cg","cm","ga","ml","bf","tg","bj","ne","gn","ma","dz","tn","mr","dj","km","mg","ht"]
+    preferredCountries: ["ca","fr","be","ch","lu","mc","sn","ci","cd","cg","cm","ga","ml","bf","tg","bj","ne","gn","ma","dz","tn","mr","dj","km","mg","ht"],
+    i18n: {
+      ca: "Canada",
+      fr: "France",
+      be: "Belgique",
+      ch: "Suisse",
+      lu: "Luxembourg",
+      mc: "Monaco",
+      sn: "Sénégal",
+      ci: "Côte d'Ivoire",
+      cd: "République démocratique du Congo",
+      cg: "Congo-Brazzaville",
+      cm: "Cameroun",
+      ga: "Gabon",
+      ml: "Mali",
+      bf: "Burkina Faso",
+      tg: "Togo",
+      bj: "Bénin",
+      ne: "Niger",
+      gn: "Guinée",
+      ma: "Maroc",
+      dz: "Algérie",
+      tn: "Tunisie",
+      mr: "Mauritanie",
+      dj: "Djibouti",
+      km: "Comores",
+      mg: "Madagascar",
+      ht: "Haïti",
+      nl: "Pays-Bas",
+      za: "Afrique du Sud",
+      gb: "Royaume-Uni",
+      de: "Allemagne",
+      do: "République dominicaine"
+    }
   });
 </script>
 
