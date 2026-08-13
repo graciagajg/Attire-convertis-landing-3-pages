@@ -2853,8 +2853,11 @@
 
   document.getElementById("signup-form").addEventListener("submit", function(e){
     e.preventDefault();
-    if(window.itiTelInstanceModal && itiTelInstanceModal.isValidNumber && itiTelInstanceModal.isValidNumber()){
-      document.getElementById("m-tel").value = itiTelInstanceModal.getNumber();
+    if(window.itiTelInstanceModal && itiTelInstanceModal.getNumber){
+      const formattedNumber = itiTelInstanceModal.getNumber();
+      if(formattedNumber){
+        document.getElementById("m-tel").value = formattedNumber;
+      }
     }
     const url = selectedPlan === "full" ? WHOP_CHECKOUT_FULL : WHOP_CHECKOUT_SPLIT;
     if(!url){
@@ -5100,7 +5103,35 @@ k("intlTelInputUtils.numberFormat",{E164:0,INTERNATIONAL:1,NATIONAL:2,RFC3966:3}
 <script>
   window.itiTelInstanceModal = window.intlTelInput(document.getElementById("m-tel"), {
     initialCountry: "ca",
-    preferredCountries: ["ca","fr","be","ch","lu","mc","sn","ci","cd","cg","cm","ga","ml","bf","tg","bj","ne","gn","ma","dz","tn","mr","dj","km","mg","ht"]
+    preferredCountries: ["ca","fr","be","ch","lu","mc","sn","ci","cd","cg","cm","ga","ml","bf","tg","bj","ne","gn","ma","dz","tn","mr","dj","km","mg","ht"],
+    i18n: {
+      ca: "Canada",
+      fr: "France",
+      be: "Belgique",
+      ch: "Suisse",
+      lu: "Luxembourg",
+      mc: "Monaco",
+      sn: "Sénégal",
+      ci: "Côte d'Ivoire",
+      cd: "République démocratique du Congo",
+      cg: "Congo-Brazzaville",
+      cm: "Cameroun",
+      ga: "Gabon",
+      ml: "Mali",
+      bf: "Burkina Faso",
+      tg: "Togo",
+      bj: "Bénin",
+      ne: "Niger",
+      gn: "Guinée",
+      ma: "Maroc",
+      dz: "Algérie",
+      tn: "Tunisie",
+      mr: "Mauritanie",
+      dj: "Djibouti",
+      km: "Comores",
+      mg: "Madagascar",
+      ht: "Haïti"
+    }
   });
 </script>
 
