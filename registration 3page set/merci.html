@@ -352,7 +352,7 @@
   <p class="video-note">Petit message de ma part</p>
 
   <div class="confirm-box">
-    <p>Tu es officiellement inscrite à <strong>ma masterclass</strong>, le vendredi 28 août à 14h00 (heure de Montréal).</p>
+    <p>Tu es officiellement inscrite à <strong>ma masterclass</strong>, le mercredi 9 septembre à 14h00 (heure de Montréal).</p>
   </div>
   <p class="zoom-note">Je viens de t'envoyer un email avec le lien Zoom. Vérifie ta boîte de réception pour garder ta place.</p>
 
@@ -371,8 +371,10 @@
         </div>
       </div>
       <div class="step-action">
-        <button class="btn on-dark" id="add-to-calendar">Ajouter au calendrier</button>
+        <button class="btn on-dark" id="add-to-calendar">Ajouter au calendrier (Apple)</button>
         <a href="#" class="gcal-link" id="gcal-link" target="_blank" rel="noopener">ou ajoute-le à Google Calendar</a>
+        <a href="#" class="gcal-link" id="outlook-link" target="_blank" rel="noopener">ou ajoute-le à Outlook</a>
+        <a href="#" class="gcal-link" id="yahoo-link" target="_blank" rel="noopener">ou ajoute-le à Yahoo Calendar</a>
       </div>
     </div>
 
@@ -386,6 +388,22 @@
           <h3>Vérifie ta boîte de réception</h3>
           <p>Si tu ne vois rien dans ta boîte principale, regarde dans tes spams ou promotions, et déplace l'email pour ne rien manquer.</p>
         </div>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-content">
+        <div class="step-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2Z"/><path d="M8.5 8.5c0 4 3 7 7 7"/></svg>
+        </div>
+        <div>
+          <span class="step-label">Étape 3</span>
+          <h3>Rejoins le groupe WhatsApp</h3>
+          <p>C'est là que je partage les rappels et les mises à jour de dernière minute avant la masterclass.</p>
+        </div>
+      </div>
+      <div class="step-action">
+        <a href="https://chat.whatsapp.com/HIQxUtizMPm6FLE4TRwmYw?s=cl&amp;p=i&amp;mlu=4" class="btn on-dark" target="_blank" rel="noopener">Rejoindre le groupe</a>
       </div>
     </div>
   </div>
@@ -405,13 +423,21 @@
     wrap.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/n6kq2qgiawk?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1" title="Mon petit message de bienvenue" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
   });
 
-  // ---------- Add to calendar (.ics download, universal) ----------
+  // ---------- Add to calendar (4 formats: Apple/.ics, Google, Outlook, Yahoo) ----------
+  // Single source of truth for the event — everything below derives
+  // from these so the four links and the .ics file can't drift apart.
+  // Wed Sept 9 2026, 14:00-15:30 EDT (America/Montreal) = 18:00-19:30 UTC
+  const EVENT_TITLE = "Deviens la femme à qui on achète - masterclass avec Elizabeth Kikumbi";
+  const EVENT_DESC = "Masterclass en direct : le système complet pour transformer ta présence en ligne en clientes qui achètent. On couvre l'identité qui attire les bonnes personnes et le contenu qui convertit. 90 minutes avec Elizabeth.";
+  const EVENT_LOCATION = "https://us06web.zoom.us/j/87489228342";
+  const EVENT_START_ICS = "20260909T180000Z"; // used by the .ics file and Yahoo
+  const EVENT_END_ICS   = "20260909T193000Z"; // (same instant, same format)
+  const EVENT_START_ISO = "2026-09-09T18:00:00Z"; // used by Outlook
+  const EVENT_END_ISO   = "2026-09-09T19:30:00Z"; // (same instant as above)
+
   function pad(n){ return String(n).padStart(2,"0"); }
 
   function buildICS(){
-    // Fri Aug 28 2026, 14:00–15:30 EDT (America/Montreal) = 18:00–19:30 UTC
-    const dtStart = "20260828T180000Z";
-    const dtEnd   = "20260828T193000Z";
     const dtStamp = new Date().toISOString().replace(/[-:]/g,"").split(".")[0] + "Z";
 
     const ics = [
@@ -421,11 +447,11 @@
       "BEGIN:VEVENT",
       "UID:" + dtStamp + "-attireconvertis@elizakikumbi.com",
       "DTSTAMP:" + dtStamp,
-      "DTSTART:" + dtStart,
-      "DTEND:" + dtEnd,
-      "SUMMARY:Deviens la femme à qui on achète - masterclass avec Elizabeth Kikumbi",
-      "DESCRIPTION:Masterclass en direct : le système complet pour transformer ta présence en ligne en clientes qui achètent. On couvre l'identité qui attire les bonnes personnes et le contenu qui convertit. 90 minutes avec Elizabeth.",
-      "LOCATION:https://us06web.zoom.us/j/89062857302",
+      "DTSTART:" + EVENT_START_ICS,
+      "DTEND:" + EVENT_END_ICS,
+      "SUMMARY:" + EVENT_TITLE,
+      "DESCRIPTION:" + EVENT_DESC,
+      "LOCATION:" + EVENT_LOCATION,
       "BEGIN:VALARM",
       "TRIGGER:-PT30M",
       "ACTION:DISPLAY",
@@ -453,12 +479,31 @@
 
   // Google Calendar quick-add link (opens in new tab)
   const gcalUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE"
-    + "&text=" + encodeURIComponent("Deviens la femme à qui on achète - masterclass avec Elizabeth Kikumbi")
-    + "&dates=20260828T140000/20260828T153000"
+    + "&text=" + encodeURIComponent(EVENT_TITLE)
+    + "&dates=20260909T140000/20260909T153000"
     + "&ctz=America/Toronto"
-    + "&details=" + encodeURIComponent("Masterclass en direct : le système complet pour transformer ta présence en ligne en clientes qui achètent. On couvre l'identité qui attire les bonnes personnes et le contenu qui convertit. 90 minutes avec Elizabeth.")
-    + "&location=" + encodeURIComponent("https://us06web.zoom.us/j/89062857302");
+    + "&details=" + encodeURIComponent(EVENT_DESC)
+    + "&location=" + encodeURIComponent(EVENT_LOCATION);
   document.getElementById("gcal-link").href = gcalUrl;
+
+  // Outlook.com quick-add link (opens in new tab)
+  const outlookUrl = "https://outlook.live.com/calendar/0/deeplink/compose"
+    + "?path=/calendar/action/compose&rru=addevent"
+    + "&subject=" + encodeURIComponent(EVENT_TITLE)
+    + "&startdt=" + EVENT_START_ISO
+    + "&enddt=" + EVENT_END_ISO
+    + "&body=" + encodeURIComponent(EVENT_DESC)
+    + "&location=" + encodeURIComponent(EVENT_LOCATION);
+  document.getElementById("outlook-link").href = outlookUrl;
+
+  // Yahoo Calendar quick-add link (opens in new tab)
+  const yahooUrl = "https://calendar.yahoo.com/?v=60&view=d&type=20"
+    + "&title=" + encodeURIComponent(EVENT_TITLE)
+    + "&st=" + EVENT_START_ICS
+    + "&et=" + EVENT_END_ICS
+    + "&desc=" + encodeURIComponent(EVENT_DESC)
+    + "&in_loc=" + encodeURIComponent(EVENT_LOCATION);
+  document.getElementById("yahoo-link").href = yahooUrl;
 </script>
 
 </body>
