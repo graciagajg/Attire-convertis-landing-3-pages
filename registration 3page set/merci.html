@@ -174,15 +174,26 @@
     color:var(--forest);
     line-height:1.45;
   }
-  .zoom-note{
-    text-align:center;
-    font-family:'Nunito Sans', sans-serif;
-    font-weight:500;
-    font-size:18px;
-    color:#2C3E37;
-    max-width:560px;
-    margin:0 auto 50px;
-    line-height:1.55;
+  .down-arrows{
+    display:flex;
+    flex-direction:row;
+    justify-content:center;
+    align-items:center;
+    gap:6px;
+    margin:18px auto;
+    color:var(--sage);
+  }
+  @keyframes chevron-bob{
+    0%, 100% { transform:translateY(0); opacity:0.55; }
+    50% { transform:translateY(7px); opacity:1; }
+  }
+  .down-arrows svg{
+    animation:chevron-bob 1.6s ease-in-out infinite;
+  }
+  .down-arrows svg:nth-child(2){ animation-delay:0.15s; }
+  .down-arrows svg:nth-child(3){ animation-delay:0.3s; }
+  @media (prefers-reduced-motion: reduce){
+    .down-arrows svg{ animation:none; }
   }
 
   /* ---------- Transition line ---------- */
@@ -190,18 +201,20 @@
     text-align:center;
     font-family:'Nunito Sans', sans-serif;
     font-style:normal;
-    font-weight:700;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:0.01em;
     font-size:23px;
     color:var(--forest);
     max-width:560px;
     margin:0 auto 40px;
-    line-height:1.5;
+    line-height:1.4;
   }
 
   /* ---------- Action steps panel (Leyla structure, our palette) ---------- */
   .steps-panel{
     background:var(--forest);
-    border-radius:28px;
+    border-radius:22px;
     padding:56px 44px;
     margin-bottom:64px;
     position:relative;
@@ -228,17 +241,6 @@
     padding:30px 32px;
   }
   .step-card + .step-card{margin-top:20px;}
-  .step-label{
-    font-family:'Nunito Sans', sans-serif;
-    font-weight:800;
-    font-style:normal;
-    font-size:12.5px;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    color:#9FB3A6;
-    margin-bottom:8px;
-    display:block;
-  }
   .step-card h3{
     font-family:'Playfair Display', serif;
     font-weight:600;
@@ -253,14 +255,15 @@
     max-width:400px;
     line-height:1.55;
   }
-  .step-icon{
+  .step-num{
     flex-shrink:0;
-    width:44px; height:44px;
-    border-radius:50%;
-    background:rgba(251,248,241,0.08);
-    border:1px solid rgba(251,248,241,0.18);
-    display:flex; align-items:center; justify-content:center;
-    color:var(--cream);
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:36px;
+    line-height:1;
+    color:#9FB3A6;
+    min-width:46px;
   }
   .step-action{
     flex-shrink:0;
@@ -274,13 +277,49 @@
     font-size:14.5px;
     white-space:nowrap;
   }
-  .gcal-link{
-    font-size:12px;
-    color:rgba(251,248,241,0.6);
-    text-decoration:underline;
-    text-underline-offset:3px;
+
+  /* ---------- Add-to-calendar dropdown (custom, no library) ---------- */
+  .calendar-dropdown{position:relative;}
+  .calendar-menu{
+    display:none;
+    position:absolute;
+    flex-direction:column;
+    gap:2px;
+    background:var(--cream);
+    border-radius:14px;
+    box-shadow:var(--shadow-soft);
+    border:1.5px solid var(--forest);
+    padding:8px;
+    min-width:210px;
+    z-index:20;
   }
-  .gcal-link:hover{color:var(--cream);}
+  .calendar-menu.open{display:flex;}
+  .calendar-option{
+    display:block;
+    width:100%;
+    text-align:left;
+    background:none;
+    border:none;
+    border-radius:10px;
+    padding:11px 14px;
+    font-family:'Nunito Sans', sans-serif;
+    font-weight:700;
+    font-size:14px;
+    color:var(--forest);
+    cursor:pointer;
+  }
+  .calendar-option:hover{background:var(--cream-soft);}
+
+  /* ---------- Glow pulse (draws the eye without needing hover) ---------- */
+  @keyframes glow-pulse{
+    0%   { box-shadow:0 0 0 0 rgba(232,180,99,0.55); }
+    70%  { box-shadow:0 0 0 12px rgba(232,180,99,0); }
+    100% { box-shadow:0 0 0 0 rgba(232,180,99,0); }
+  }
+  .btn.glow{ animation:glow-pulse 2.4s ease-out infinite; }
+  @media (prefers-reduced-motion: reduce){
+    .btn.glow{ animation:none; }
+  }
 
   .step-content{
     display:flex;
@@ -352,37 +391,56 @@
   <p class="video-note">Petit message de ma part</p>
 
   <div class="confirm-box">
-    <p>Tu es officiellement inscrite à <strong>ma masterclass</strong>, le vendredi 28 août à 14h00 (heure de Montréal).</p>
+    <p>Félicitations, tu as presque terminé ton inscription !</p>
   </div>
-  <p class="zoom-note">Je viens de t'envoyer un email avec le lien Zoom. Vérifie ta boîte de réception pour garder ta place.</p>
 
-  <p class="transition">Avant de quitter cette page, fais une dernière chose <em>(crois-moi, tu ne veux pas manquer ça).</em></p>
+  <div class="down-arrows" aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+  </div>
+
+  <p class="transition">Complète ces 3 étapes pour finaliser ton inscription.</p>
 
   <div class="steps-panel">
     <div class="step-card">
       <div class="step-content">
-        <div class="step-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>
-        </div>
+        <span class="step-num">01</span>
         <div>
-          <span class="step-label">Étape 1</span>
           <h3>Ajoute ça à ton calendrier</h3>
           <p>Pour ne jamais manquer l'heure, l'événement s'ajoute directement, avec le rappel.</p>
         </div>
       </div>
       <div class="step-action">
-        <button class="btn on-dark" id="add-to-calendar">Ajouter au calendrier</button>
-        <a href="#" class="gcal-link" id="gcal-link" target="_blank" rel="noopener">ou ajoute-le à Google Calendar</a>
+        <div class="calendar-dropdown">
+          <button class="btn on-dark glow" id="calendar-toggle" type="button" aria-haspopup="true" aria-expanded="false">Ajouter au calendrier</button>
+          <div class="calendar-menu" id="calendar-menu">
+            <button type="button" class="calendar-option" id="add-to-calendar">Apple Calendar</button>
+            <a href="#" class="calendar-option" id="gcal-link" target="_blank" rel="noopener">Google Calendar</a>
+            <a href="#" class="calendar-option" id="outlook-link" target="_blank" rel="noopener">Outlook</a>
+            <a href="#" class="calendar-option" id="yahoo-link" target="_blank" rel="noopener">Yahoo Calendar</a>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="step-card">
       <div class="step-content">
-        <div class="step-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7 10-7"/></svg>
-        </div>
+        <span class="step-num">02</span>
         <div>
-          <span class="step-label">Étape 2</span>
+          <h3>Rejoins le groupe WhatsApp</h3>
+          <p>C'est là que je partage les rappels et les mises à jour de dernière minute avant la masterclass.</p>
+        </div>
+      </div>
+      <div class="step-action">
+        <a href="https://chat.whatsapp.com/HIQxUtizMPm6FLE4TRwmYw?s=cl&amp;p=i&amp;mlu=4" class="btn on-dark glow" target="_blank" rel="noopener">Rejoindre le groupe</a>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-content">
+        <span class="step-num">03</span>
+        <div>
           <h3>Vérifie ta boîte de réception</h3>
           <p>Si tu ne vois rien dans ta boîte principale, regarde dans tes spams ou promotions, et déplace l'email pour ne rien manquer.</p>
         </div>
@@ -405,13 +463,21 @@
     wrap.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/n6kq2qgiawk?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1" title="Mon petit message de bienvenue" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
   });
 
-  // ---------- Add to calendar (.ics download, universal) ----------
+  // ---------- Add to calendar (4 formats: Apple/.ics, Google, Outlook, Yahoo) ----------
+  // Single source of truth for the event — everything below derives
+  // from these so the four links and the .ics file can't drift apart.
+  // Wed Sept 9 2026, 14:00-15:30 EDT (America/Montreal) = 18:00-19:30 UTC
+  const EVENT_TITLE = "Deviens la femme à qui on achète - masterclass avec Elizabeth Kikumbi";
+  const EVENT_DESC = "Masterclass en direct : le système complet pour transformer ta présence en ligne en clientes qui achètent. On couvre l'identité qui attire les bonnes personnes et le contenu qui convertit. 90 minutes avec Elizabeth.";
+  const EVENT_LOCATION = "https://us06web.zoom.us/j/87489228342";
+  const EVENT_START_ICS = "20260909T180000Z"; // used by the .ics file and Yahoo
+  const EVENT_END_ICS   = "20260909T193000Z"; // (same instant, same format)
+  const EVENT_START_ISO = "2026-09-09T18:00:00Z"; // used by Outlook
+  const EVENT_END_ISO   = "2026-09-09T19:30:00Z"; // (same instant as above)
+
   function pad(n){ return String(n).padStart(2,"0"); }
 
   function buildICS(){
-    // Fri Aug 28 2026, 14:00–15:30 EDT (America/Montreal) = 18:00–19:30 UTC
-    const dtStart = "20260828T180000Z";
-    const dtEnd   = "20260828T193000Z";
     const dtStamp = new Date().toISOString().replace(/[-:]/g,"").split(".")[0] + "Z";
 
     const ics = [
@@ -421,11 +487,11 @@
       "BEGIN:VEVENT",
       "UID:" + dtStamp + "-attireconvertis@elizakikumbi.com",
       "DTSTAMP:" + dtStamp,
-      "DTSTART:" + dtStart,
-      "DTEND:" + dtEnd,
-      "SUMMARY:Deviens la femme à qui on achète - masterclass avec Elizabeth Kikumbi",
-      "DESCRIPTION:Masterclass en direct : le système complet pour transformer ta présence en ligne en clientes qui achètent. On couvre l'identité qui attire les bonnes personnes et le contenu qui convertit. 90 minutes avec Elizabeth.",
-      "LOCATION:https://us06web.zoom.us/j/89062857302",
+      "DTSTART:" + EVENT_START_ICS,
+      "DTEND:" + EVENT_END_ICS,
+      "SUMMARY:" + EVENT_TITLE,
+      "DESCRIPTION:" + EVENT_DESC,
+      "LOCATION:" + EVENT_LOCATION,
       "BEGIN:VALARM",
       "TRIGGER:-PT30M",
       "ACTION:DISPLAY",
@@ -449,16 +515,94 @@
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+    closeCalendarMenu();
   });
 
   // Google Calendar quick-add link (opens in new tab)
   const gcalUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE"
-    + "&text=" + encodeURIComponent("Deviens la femme à qui on achète - masterclass avec Elizabeth Kikumbi")
-    + "&dates=20260828T140000/20260828T153000"
+    + "&text=" + encodeURIComponent(EVENT_TITLE)
+    + "&dates=20260909T140000/20260909T153000"
     + "&ctz=America/Toronto"
-    + "&details=" + encodeURIComponent("Masterclass en direct : le système complet pour transformer ta présence en ligne en clientes qui achètent. On couvre l'identité qui attire les bonnes personnes et le contenu qui convertit. 90 minutes avec Elizabeth.")
-    + "&location=" + encodeURIComponent("https://us06web.zoom.us/j/89062857302");
+    + "&details=" + encodeURIComponent(EVENT_DESC)
+    + "&location=" + encodeURIComponent(EVENT_LOCATION);
   document.getElementById("gcal-link").href = gcalUrl;
+
+  // Outlook.com quick-add link (opens in new tab)
+  const outlookUrl = "https://outlook.live.com/calendar/0/deeplink/compose"
+    + "?path=/calendar/action/compose&rru=addevent"
+    + "&subject=" + encodeURIComponent(EVENT_TITLE)
+    + "&startdt=" + EVENT_START_ISO
+    + "&enddt=" + EVENT_END_ISO
+    + "&body=" + encodeURIComponent(EVENT_DESC)
+    + "&location=" + encodeURIComponent(EVENT_LOCATION);
+  document.getElementById("outlook-link").href = outlookUrl;
+
+  // Yahoo Calendar quick-add link (opens in new tab)
+  const yahooUrl = "https://calendar.yahoo.com/?v=60&view=d&type=20"
+    + "&title=" + encodeURIComponent(EVENT_TITLE)
+    + "&st=" + EVENT_START_ICS
+    + "&et=" + EVENT_END_ICS
+    + "&desc=" + encodeURIComponent(EVENT_DESC)
+    + "&in_loc=" + encodeURIComponent(EVENT_LOCATION);
+  document.getElementById("yahoo-link").href = yahooUrl;
+
+  // ---------- Calendar dropdown open/close (custom, no library) ----------
+  // position:fixed + coordinates computed here, rather than a CSS-only
+  // popover, so the menu can never get clipped by an ancestor's
+  // overflow:hidden (the steps panel uses that for a decorative blob).
+  const calendarToggle = document.getElementById("calendar-toggle");
+  const calendarMenu = document.getElementById("calendar-menu");
+
+  // Move the menu to be a direct child of <body>. Left inside its
+  // step-card, its z-index only wins within that card's own stacking
+  // context — the WhatsApp step-card comes after it in the page and
+  // sits at that same outer layer, so it painted on top regardless.
+  // As a body-level element, its z-index finally applies page-wide.
+  document.body.appendChild(calendarMenu);
+
+  function openCalendarMenu(){
+    calendarMenu.classList.add("open");
+    const rect = calendarToggle.getBoundingClientRect();
+    const menuWidth = calendarMenu.offsetWidth;
+    // Document coordinates (viewport rect + current scroll offset), not
+    // viewport coordinates — with position:absolute this makes the menu
+    // scroll together with the page instead of staying glued to one
+    // spot on screen while the button it's anchored to scrolls away.
+    calendarMenu.style.top = (rect.bottom + window.scrollY + 10) + "px";
+    calendarMenu.style.left = Math.max(12, Math.min(
+      window.innerWidth - menuWidth - 12,
+      rect.left + window.scrollX + rect.width / 2 - menuWidth / 2
+    )) + "px";
+    calendarToggle.setAttribute("aria-expanded", "true");
+  }
+
+  function closeCalendarMenu(){
+    calendarMenu.classList.remove("open");
+    calendarToggle.setAttribute("aria-expanded", "false");
+  }
+
+  calendarToggle.addEventListener("click", function(e){
+    e.stopPropagation();
+    if(calendarMenu.classList.contains("open")){
+      closeCalendarMenu();
+    } else {
+      openCalendarMenu();
+    }
+  });
+
+  document.querySelectorAll(".calendar-option[href]").forEach(function(link){
+    link.addEventListener("click", closeCalendarMenu);
+  });
+
+  document.addEventListener("click", function(e){
+    if(calendarMenu.classList.contains("open") && !calendarMenu.contains(e.target) && e.target !== calendarToggle){
+      closeCalendarMenu();
+    }
+  });
+
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape") closeCalendarMenu();
+  });
 </script>
 
 </body>

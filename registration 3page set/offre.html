@@ -1481,6 +1481,18 @@
     box-shadow:0 14px 34px rgba(19,44,38,0.32);
   }
   .btn:active{transform:translateY(-1px) scale(0.995);}
+
+  /* ---------- Glow pulse (draws the eye without needing hover) ---------- */
+  @keyframes glow-pulse{
+    0%   { box-shadow:0 0 0 0 rgba(232,180,99,0.55); }
+    70%  { box-shadow:0 0 0 12px rgba(232,180,99,0); }
+    100% { box-shadow:0 0 0 0 rgba(232,180,99,0); }
+  }
+  .btn.glow{ animation:glow-pulse 2.4s ease-out infinite; }
+  @media (prefers-reduced-motion: reduce){
+    .btn.glow{ animation:none; }
+  }
+
   .btn small{
     font-weight:500;
     font-size:12.5px;
@@ -1619,7 +1631,7 @@
   /* ---------- Pathway block (elevated redesign, dark, replaces cream-on-cream anchor) ---------- */
   .pathway-block{
     background:var(--forest);
-    border-radius:28px;
+    border-radius:22px;
     padding:60px 56px;
     max-width:820px;
     margin:0 auto;
@@ -1696,8 +1708,8 @@
 
   .modules-panel{
     background:var(--forest);
-    border-radius:28px;
-    padding:52px 44px;
+    border-radius:22px;
+    padding:14px 0;
     position:relative;
     overflow:hidden;
   }
@@ -1712,44 +1724,23 @@
   .module-item{
     position:relative;
     z-index:1;
-    background:rgba(251,248,241,0.05);
-    border:1px solid rgba(251,248,241,0.16);
-    border-radius:16px;
-    overflow:hidden;
+    box-shadow:0 6px 8px -6px rgba(0,0,0,0.45);
   }
-  .module-item + .module-item{margin-top:16px;}
+  .module-item:last-child{box-shadow:none;}
   .module-item summary{
     list-style:none;
     display:flex;
     align-items:center;
     justify-content:space-between;
     gap:20px;
-    padding:26px 28px;
+    padding:14px 44px;
     cursor:pointer;
   }
   .module-item summary::-webkit-details-marker{display:none;}
-  .module-summary-left{
-    display:flex;
-    align-items:center;
-    gap:20px;
-  }
-  .module-num{
-    flex-shrink:0;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    width:36px; height:36px;
-    border-radius:50%;
-    background:var(--cream);
-    color:var(--forest);
-    font-family:'Playfair Display', serif;
+  .module-item h3{
+    font-family:'Nunito Sans', sans-serif;
     font-weight:700;
     font-size:15px;
-  }
-  .module-item h3{
-    font-family:'Playfair Display', serif;
-    font-weight:600;
-    font-size:18px;
     line-height:1.4;
     color:var(--cream);
   }
@@ -1761,7 +1752,7 @@
   }
   .module-item[open] .module-chevron{transform:rotate(180deg);}
   .module-body{
-    padding:0 28px 30px 84px;
+    padding:0 44px 28px;
   }
   .module-list{list-style:none; margin-bottom:22px;}
   .module-list li{
@@ -1779,28 +1770,29 @@
     margin-top:3px;
   }
   .template-chips{
+    list-style:none;
     display:flex;
-    flex-wrap:wrap;
-    gap:10px;
+    flex-direction:column;
+    gap:9px;
   }
   .template-chip{
-    display:inline-flex;
-    align-items:center;
-    gap:7px;
-    background:rgba(251,248,241,0.08);
-    border:1px solid rgba(251,248,241,0.2);
-    border-radius:100px;
-    padding:9px 16px;
+    position:relative;
+    padding-left:16px;
     font-size:12.5px;
     font-weight:700;
     color:var(--cream);
   }
-  .template-chip svg{flex-shrink:0; color:rgba(251,248,241,0.75);}
+  .template-chip::before{
+    content:"•";
+    position:absolute;
+    left:0;
+    color:rgba(251,248,241,0.5);
+  }
 
   /* ---------- Logistics panel (dark, matches step-card language) ---------- */
   .logi-panel{
     background:var(--forest);
-    border-radius:28px;
+    border-radius:22px;
     padding:56px 48px;
     position:relative;
     overflow:hidden;
@@ -1828,15 +1820,6 @@
     display:flex;
     gap:16px;
     align-items:flex-start;
-  }
-  .logi-icon{
-    flex-shrink:0;
-    width:42px; height:42px;
-    border-radius:50%;
-    background:rgba(251,248,241,0.08);
-    border:1px solid rgba(251,248,241,0.18);
-    display:flex; align-items:center; justify-content:center;
-    color:var(--cream);
   }
   .logi-item h4{
     font-family:'Playfair Display', serif;
@@ -1913,7 +1896,7 @@
   /* ---------- Pricing + CTA ---------- */
   .price-card{
     background:var(--forest);
-    border-radius:28px;
+    border-radius:22px;
     padding:64px 56px;
     text-align:center;
     max-width:760px;
@@ -1938,16 +1921,13 @@
     font-style:normal;
   }
   .price-limited{
-    display:inline-block;
-    margin-bottom:16px;
-    padding:7px 16px;
-    border-radius:100px;
-    background:rgba(251,248,241,0.1);
-    border:1px solid rgba(251,248,241,0.24);
-    font-size:12px;
-    font-weight:700;
-    letter-spacing:0.05em;
-    text-transform:uppercase;
+    display:block;
+    margin-bottom:14px;
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:16px;
+    letter-spacing:0.01em;
     color:var(--cream);
   }
   .price-amount{
@@ -2237,7 +2217,8 @@
   @media (max-width:860px){
     .transfo-grid{grid-template-columns:1fr;}
     .logi-grid{grid-template-columns:1fr;}
-    .modules-panel{padding:32px 20px;}
+    .modules-panel{padding:10px 20px;}
+    .module-item summary{padding:14px 4px;}
     .module-body{padding:0 20px 26px 24px;}
     .qual-grid{grid-template-columns:1fr;}
     .qual-block{padding:40px 26px;}
@@ -2443,16 +2424,13 @@
 
 <!-- MODULES -->
 <section>
-  <div class="container-narrow">
-    <h2 class="section-title" style="margin-bottom:44px;">Ce que tu construis</h2>
+  <div class="container">
+    <h2 class="section-title" style="margin-bottom:44px;">Ce que tu construis chaque semaine</h2>
 
     <div class="modules-panel">
-      <details class="module-item" open>
+      <details class="module-item">
         <summary>
-          <div class="module-summary-left">
-            <div class="module-num">1</div>
-            <h3>Deviens la femme qu'on reconnaît, qu'on suit et à qui on fait confiance</h3>
-          </div>
+          <h3>Semaine 1 : Deviens la femme qu'on reconnaît, qu'on suit et à qui on fait confiance</h3>
           <svg class="module-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </summary>
         <div class="module-body">
@@ -2462,18 +2440,15 @@
             <li><svg class="mk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Une identité publique claire que tu assumes pleinement, pas un personnage, toi</li>
             <li><svg class="mk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>La fondation sur laquelle chaque décision de contenu et de marque va reposer</li>
           </ul>
-          <div class="template-chips">
-            <span class="template-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Template : Identité de Marque</span>
-          </div>
+          <ul class="template-chips">
+            <li class="template-chip">Template : Identité de Marque</li>
+          </ul>
         </div>
       </details>
 
       <details class="module-item">
         <summary>
-          <div class="module-summary-left">
-            <div class="module-num">2</div>
-            <h3>Identifie ta cliente et parle-lui si bien qu'elle ne peut pas t'ignorer</h3>
-          </div>
+          <h3>Semaine 2 : Identifie ta cliente et parle-lui si bien qu'elle ne peut pas t'ignorer</h3>
           <svg class="module-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </summary>
         <div class="module-body">
@@ -2483,19 +2458,16 @@
             <li><svg class="mk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Un one-liner qui explique en une phrase qui tu aides et comment</li>
             <li><svg class="mk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Une bio Instagram qui arrête les bonnes personnes dès le premier regard</li>
           </ul>
-          <div class="template-chips">
-            <span class="template-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Template : Ma Cliente Idéale</span>
-            <span class="template-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Template : Bio Instagram</span>
-          </div>
+          <ul class="template-chips">
+            <li class="template-chip">Template : Ma Cliente Idéale</li>
+            <li class="template-chip">Template : Bio Instagram</li>
+          </ul>
         </div>
       </details>
 
       <details class="module-item">
         <summary>
-          <div class="module-summary-left">
-            <div class="module-num">3</div>
-            <h3>Publie du contenu qui attire et convertit, sans te battre contre toi-même chaque semaine</h3>
-          </div>
+          <h3>Semaine 3 : Publie du contenu qui attire et convertit, sans te battre contre toi-même chaque semaine</h3>
           <svg class="module-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </summary>
         <div class="module-body">
@@ -2506,22 +2478,19 @@
             <li><svg class="mk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Une banque d'idées infinie : plus jamais le vide</li>
             <li><svg class="mk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Du contenu publié, pas parfait, mais qui travaille pour toi</li>
           </ul>
-          <div class="template-chips">
-            <span class="template-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Piliers de Contenu</span>
-            <span class="template-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Banque de Hooks Prouvés</span>
-            <span class="template-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Templates de Scripts</span>
-            <span class="template-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Banque d'Idées de Contenu</span>
-            <span class="template-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Calendrier de Contenu</span>
-          </div>
+          <ul class="template-chips">
+            <li class="template-chip">Piliers de Contenu</li>
+            <li class="template-chip">Banque de Hooks Prouvés</li>
+            <li class="template-chip">Templates de Scripts</li>
+            <li class="template-chip">Banque d'Idées de Contenu</li>
+            <li class="template-chip">Calendrier de Contenu</li>
+          </ul>
         </div>
       </details>
 
       <details class="module-item">
         <summary>
-          <div class="module-summary-left">
-            <div class="module-num">4</div>
-            <h3>Transforme ta présence en premières clientes</h3>
-          </div>
+          <h3>Semaine 4 : Transforme ta présence en premières clientes</h3>
           <svg class="module-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </summary>
         <div class="module-body">
@@ -2531,11 +2500,11 @@
             <li><svg class="mk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Des CTAs clairs pour chaque type de contenu</li>
             <li><svg class="mk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>La confiance de transformer un DM en opportunité réelle</li>
           </ul>
-          <div class="template-chips">
-            <span class="template-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Guide de Vente par DM</span>
-            <span class="template-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Templates de Scripts de Conversion</span>
-            <span class="template-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Templates de CTAs</span>
-          </div>
+          <ul class="template-chips">
+            <li class="template-chip">Guide de Vente par DM</li>
+            <li class="template-chip">Templates de Scripts de Conversion</li>
+            <li class="template-chip">Templates de CTAs</li>
+          </ul>
         </div>
       </details>
     </div>
@@ -2550,23 +2519,18 @@
     <div class="logi-panel">
       <div class="logi-grid">
         <div class="logi-item">
-          <div class="logi-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></div>
           <div><h4>Appels en direct chaque semaine</h4><p>4 semaines, en groupe, avec moi.</p></div>
         </div>
         <div class="logi-item">
-          <div class="logi-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5Z"/></svg></div>
           <div><h4>Audits de contenu chaque semaine</h4><p>Je regarde ton contenu et te donne un retour direct.</p></div>
         </div>
         <div class="logi-item">
-          <div class="logi-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
           <div><h4>Accès à vie</h4><p>Aux modules, templates et enregistrements.</p></div>
         </div>
         <div class="logi-item">
-          <div class="logi-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
           <div><h4>Communauté</h4><p>Accès aux autres femmes de la cohorte.</p></div>
         </div>
         <div class="logi-item">
-          <div class="logi-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
           <div><h4>Support à la demande, tous les jours</h4><p>En plus de mes appels et audits hebdomadaires, écris-nous n'importe quand : notre équipe répond pendant les heures de bureau.</p></div>
         </div>
       </div>
@@ -2655,7 +2619,7 @@
     <div class="price-card">
       <span class="price-limited">Places limitées</span>
       <h2 class="section-title">Rejoins Attire &amp; Convertis</h2>
-      <div class="price-amount">450€</div>
+      <div class="price-amount">225€</div>
       <ul class="price-includes">
         <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Les 4 modules complets (Identité, Cliente Idéale, Contenu, Conversion)</li>
         <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Tous les templates et banques de ressources</li>
@@ -2668,16 +2632,16 @@
       <div class="payment-toggle">
         <div class="pay-option active" id="pay-full" onclick="selectPayment('full')">
           <span class="po-label">Paiement complet</span>
-          <span class="po-amount">450€</span>
+          <span class="po-amount">225€</span>
         </div>
         <div class="pay-option" id="pay-split" onclick="selectPayment('split')">
           <span class="po-label">En 2 fois</span>
-          <span class="po-amount">225€ × 2</span>
+          <span class="po-amount">112,50€ × 2</span>
         </div>
       </div>
 
       <div class="btn-wrap">
-        <a href="#" class="btn" id="cta-whop">Je rejoins Attire &amp; Convertis</a>
+        <a href="#" class="btn glow" id="cta-whop">Je rejoins Attire &amp; Convertis</a>
         <span class="btn-note">Paiement sécurisé via Whop.</span>
       </div>
     </div>
@@ -2691,7 +2655,7 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
     <h3>Réserve ta place</h3>
-    <p class="modal-sub" id="modal-plan-label">Paiement complet : 450€</p>
+    <p class="modal-sub" id="modal-plan-label">Paiement complet : 225€</p>
     <form id="signup-form">
       <div class="modal-field">
         <label for="m-nom">Prénom</label>
@@ -2779,7 +2743,7 @@
 
 <script>
   // ---------- Cohort start countdown ----------
-  const COHORT_START_DATE = "2026-09-11T00:00:00-04:00";
+  const COHORT_START_DATE = "2026-09-18T00:00:00-04:00";
 
   function updateCohortCountdown(){
     if(!COHORT_START_DATE){
@@ -2810,7 +2774,6 @@
   setInterval(updateCohortCountdown, 1000);
 
   // ---------- Payment plan toggle -> Whop checkout links ----------
-  // TODO (Gracia): replace with the real Whop checkout URLs once discount codes / products are set up.
   const WHOP_CHECKOUT_FULL = "https://whop.com/checkout/plan_hAnJiJjAcPOwx";
   const WHOP_CHECKOUT_SPLIT = "https://whop.com/checkout/plan_hNU5ioCS2Jp0n";
 
@@ -2829,7 +2792,7 @@
   const modalPlanLabel = document.getElementById("modal-plan-label");
 
   function openSignupModal(){
-    modalPlanLabel.textContent = selectedPlan === "full" ? "Paiement complet : 450€" : "En 2 fois : 225€ × 2";
+    modalPlanLabel.textContent = selectedPlan === "full" ? "Paiement complet : 225€" : "En 2 fois : 112,50€ × 2";
     modal.classList.add("open");
     document.body.style.overflow = "hidden";
   }
