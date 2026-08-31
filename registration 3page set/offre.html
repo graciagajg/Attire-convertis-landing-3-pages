@@ -2655,7 +2655,7 @@
     <div class="price-card">
       <span class="price-limited">Places limitées</span>
       <h2 class="section-title">Rejoins Attire &amp; Convertis</h2>
-      <div class="price-amount">450€</div>
+      <div class="price-amount">225€</div>
       <ul class="price-includes">
         <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Les 4 modules complets (Identité, Cliente Idéale, Contenu, Conversion)</li>
         <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Tous les templates et banques de ressources</li>
@@ -2668,11 +2668,11 @@
       <div class="payment-toggle">
         <div class="pay-option active" id="pay-full" onclick="selectPayment('full')">
           <span class="po-label">Paiement complet</span>
-          <span class="po-amount">450€</span>
+          <span class="po-amount">225€</span>
         </div>
         <div class="pay-option" id="pay-split" onclick="selectPayment('split')">
           <span class="po-label">En 2 fois</span>
-          <span class="po-amount">225€ × 2</span>
+          <span class="po-amount">112,50€ × 2</span>
         </div>
       </div>
 
@@ -2691,7 +2691,7 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
     <h3>Réserve ta place</h3>
-    <p class="modal-sub" id="modal-plan-label">Paiement complet : 450€</p>
+    <p class="modal-sub" id="modal-plan-label">Paiement complet : 225€</p>
     <form id="signup-form">
       <div class="modal-field">
         <label for="m-nom">Prénom</label>
@@ -2779,7 +2779,7 @@
 
 <script>
   // ---------- Cohort start countdown ----------
-  const COHORT_START_DATE = "2026-09-11T00:00:00-04:00";
+  const COHORT_START_DATE = "2026-09-18T00:00:00-04:00";
 
   function updateCohortCountdown(){
     if(!COHORT_START_DATE){
@@ -2810,7 +2810,6 @@
   setInterval(updateCohortCountdown, 1000);
 
   // ---------- Payment plan toggle -> Whop checkout links ----------
-  // TODO (Gracia): replace with the real Whop checkout URLs once discount codes / products are set up.
   const WHOP_CHECKOUT_FULL = "https://whop.com/checkout/plan_hAnJiJjAcPOwx";
   const WHOP_CHECKOUT_SPLIT = "https://whop.com/checkout/plan_hNU5ioCS2Jp0n";
 
@@ -2829,7 +2828,7 @@
   const modalPlanLabel = document.getElementById("modal-plan-label");
 
   function openSignupModal(){
-    modalPlanLabel.textContent = selectedPlan === "full" ? "Paiement complet : 450€" : "En 2 fois : 225€ × 2";
+    modalPlanLabel.textContent = selectedPlan === "full" ? "Paiement complet : 225€" : "En 2 fois : 112,50€ × 2";
     modal.classList.add("open");
     document.body.style.overflow = "hidden";
   }
