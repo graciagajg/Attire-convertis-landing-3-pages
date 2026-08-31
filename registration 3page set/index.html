@@ -1522,6 +1522,18 @@
   }
   .btn:hover::before{opacity:1;}
   .btn:active{transform:translateY(-1px) scale(0.995);}
+
+  /* ---------- Glow pulse (draws the eye without needing hover) ---------- */
+  @keyframes glow-pulse{
+    0%   { box-shadow:0 0 0 0 rgba(232,180,99,0.55); }
+    70%  { box-shadow:0 0 0 12px rgba(232,180,99,0); }
+    100% { box-shadow:0 0 0 0 rgba(232,180,99,0); }
+  }
+  .btn.glow{ animation:glow-pulse 2.4s ease-out infinite; }
+  @media (prefers-reduced-motion: reduce){
+    .btn.glow{ animation:none; }
+  }
+
   .btn small{
     font-family:'Nunito Sans', sans-serif;
     font-weight:500;
@@ -1679,21 +1691,6 @@
     text-align:center;
     padding:0 8px;
   }
-  .value-icon{
-    width:52px; height:52px;
-    margin:0 auto 22px;
-    border-radius:50%;
-    background:var(--cream-soft);
-    border:1px solid var(--cream-line);
-    display:flex; align-items:center; justify-content:center;
-    color:var(--forest);
-    transition:transform .3s ease, background-color .3s ease;
-  }
-  .value-item:hover .value-icon{
-    background:var(--forest);
-    color:var(--cream);
-    transform:translateY(-4px) rotate(-4deg);
-  }
   .value-item h3{
     font-family:'Playfair Display', serif;
     font-weight:600;
@@ -1710,7 +1707,7 @@
   /* ---------- Signature section: 4 étapes ---------- */
   .framework{
     background:var(--forest);
-    border-radius:28px;
+    border-radius:22px;
     padding:70px 56px;
     position:relative;
     overflow:hidden;
@@ -1917,22 +1914,11 @@
     margin-bottom:18px;
   }
   .bio-content p:last-of-type{margin-bottom:0;}
-  .placeholder-tag{
-    display:inline-block;
-    margin-top:20px;
-    font-size:12px;
-    font-style:italic;
-    color:var(--sage);
-    background:var(--cream-soft);
-    border:1px dashed var(--cream-line);
-    padding:6px 14px;
-    border-radius:100px;
-  }
 
   /* ---------- Final CTA band ---------- */
   .final-cta{
     background:var(--forest);
-    border-radius:28px;
+    border-radius:22px;
     padding:80px 40px;
     text-align:center;
   }
@@ -2245,30 +2231,18 @@
     <h2 class="section-title">Ce que tu vas repartir avec</h2>
     <div class="value-grid">
       <div class="value-item">
-        <div class="value-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 3 7l9 5 9-5-9-5Z"/><path d="M3 12l9 5 9-5"/><path d="M3 17l9 5 9-5"/></svg>
-        </div>
-        <h3>La méthode en 4 étapes</h3>
+        <h3>Le système en 4 étapes</h3>
         <p>Pour devenir une femme qu'on reconnaît, qu'on suit, et à qui on achète. Pas de théorie. Un système que tu peux commencer à appliquer dès cette semaine.</p>
       </div>
       <div class="value-item">
-        <div class="value-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        </div>
         <h3>Transformer ton audience</h3>
         <p>Comment transformer ton audience en acheteuses, sans jamais avoir l'impression de vendre.</p>
       </div>
       <div class="value-item">
-        <div class="value-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-        </div>
         <h3>Devenir reconnaissable</h3>
         <p>Ce qui rend une femme reconnaissable en ligne, et comment le construire toi-même, même si tu pars de zéro aujourd'hui.</p>
       </div>
       <div class="value-item">
-        <div class="value-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg>
-        </div>
         <h3>Le premier geste concret</h3>
         <p>Pour sortir du silence, quelque chose que tu peux appliquer dès ce soir, pas dans six mois.</p>
       </div>
@@ -2469,7 +2443,7 @@
           <label for="consent">J'accepte de recevoir des rappels par email et SMS concernant cette masterclass.</label>
         </div>
         <p class="privacy-note"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>Tes informations restent 100% confidentielles. Elles ne seront jamais partagées ni vendues.</span></p>
-        <button type="submit" class="btn magnetic">Réserve ta place gratuitement<small>Mercredi 9 septembre à 14:00 EDT</small></button>
+        <button type="submit" class="btn magnetic glow">Réserve ta place gratuitement<small>Mercredi 9 septembre à 14:00 EDT</small></button>
       </form>
     </div>
   </div>
