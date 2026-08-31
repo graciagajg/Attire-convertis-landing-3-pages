@@ -8,7 +8,7 @@ binding = "ASSETS"
 
 [[kv_namespaces]]
 binding = "FAILED_SUBSCRIBERS"
-id = "a1f382b93729413c80f8e1692a4f1806"
+id = "4d299c70fbc5415abba3cfd8b0eb2fee"
 
 [[kv_namespaces]]
 binding = "CHECKOUT_LEADS"
