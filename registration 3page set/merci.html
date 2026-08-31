@@ -535,6 +535,13 @@
   const calendarToggle = document.getElementById("calendar-toggle");
   const calendarMenu = document.getElementById("calendar-menu");
 
+  // Move the menu to be a direct child of <body>. Left inside its
+  // step-card, its z-index only wins within that card's own stacking
+  // context — the WhatsApp step-card comes after it in the page and
+  // sits at that same outer layer, so it painted on top regardless.
+  // As a body-level element, its z-index finally applies page-wide.
+  document.body.appendChild(calendarMenu);
+
   function openCalendarMenu(){
     calendarMenu.classList.add("open");
     const rect = calendarToggle.getBoundingClientRect();
