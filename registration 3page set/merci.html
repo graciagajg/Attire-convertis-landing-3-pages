@@ -176,12 +176,13 @@
   }
   .down-arrows{
     display:flex;
-    flex-direction:column;
+    flex-direction:row;
+    justify-content:center;
     align-items:center;
-    margin-top:14px;
+    gap:6px;
+    margin:18px auto;
     color:var(--sage);
   }
-  .down-arrows svg + svg{margin-top:-10px;}
 
   /* ---------- Transition line ---------- */
   .transition{
@@ -379,10 +380,12 @@
 
   <div class="confirm-box">
     <p>Félicitations, tu as presque terminé ton inscription !</p>
-    <div class="down-arrows" aria-hidden="true">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-    </div>
+  </div>
+
+  <div class="down-arrows" aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
   </div>
 
   <p class="transition">Complète ces 3 étapes pour finaliser ton inscription.</p>
