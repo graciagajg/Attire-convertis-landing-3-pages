@@ -1347,7 +1347,6 @@
     --cream-line: rgba(19,44,38,0.14);
     --shadow-soft: 0 10px 30px rgba(19,44,38,0.12);
     --shadow-btn: 0 8px 20px rgba(19,44,38,0.25);
-    --gold: #E8B463;
   }
 
   *{box-sizing:border-box; margin:0; padding:0;}
@@ -1748,13 +1747,13 @@
   }
   .module-num{
     flex-shrink:0;
-    min-width:36px;
+    min-width:40px;
     font-family:'Playfair Display', serif;
     font-style:italic;
     font-weight:600;
-    font-size:22px;
+    font-size:28px;
     line-height:1;
-    color:var(--gold);
+    color:#9FB3A6;
   }
   .module-item h3{
     font-family:'Playfair Display', serif;
@@ -1771,7 +1770,7 @@
   }
   .module-item[open] .module-chevron{transform:rotate(180deg);}
   .module-body{
-    padding:0 28px 30px 84px;
+    padding:0 28px 30px 88px;
   }
   .module-list{list-style:none; margin-bottom:22px;}
   .module-list li{
@@ -1789,21 +1788,23 @@
     margin-top:3px;
   }
   .template-chips{
+    list-style:none;
     display:flex;
-    flex-wrap:wrap;
-    gap:10px;
+    flex-direction:column;
+    gap:9px;
   }
   .template-chip{
-    display:inline-flex;
-    align-items:center;
-    gap:7px;
-    background:rgba(251,248,241,0.08);
-    border:1px solid rgba(251,248,241,0.2);
-    border-radius:100px;
-    padding:9px 16px;
+    position:relative;
+    padding-left:16px;
     font-size:12.5px;
     font-weight:700;
     color:var(--cream);
+  }
+  .template-chip::before{
+    content:"•";
+    position:absolute;
+    left:0;
+    color:rgba(251,248,241,0.5);
   }
 
   /* ---------- Logistics panel (dark, matches step-card language) ---------- */
@@ -1842,7 +1843,7 @@
     font-family:'Playfair Display', serif;
     font-weight:600;
     font-size:17px;
-    color:var(--gold);
+    color:var(--cream);
     margin-bottom:6px;
   }
   .logi-item p{
@@ -1945,7 +1946,7 @@
     font-weight:600;
     font-size:16px;
     letter-spacing:0.01em;
-    color:var(--gold);
+    color:var(--cream);
   }
   .price-amount{
     font-family:'Nunito Sans', sans-serif;
@@ -2459,9 +2460,9 @@
             <li><svg class="mk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Une identité publique claire que tu assumes pleinement, pas un personnage, toi</li>
             <li><svg class="mk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>La fondation sur laquelle chaque décision de contenu et de marque va reposer</li>
           </ul>
-          <div class="template-chips">
-            <span class="template-chip">Template : Identité de Marque</span>
-          </div>
+          <ul class="template-chips">
+            <li class="template-chip">Template : Identité de Marque</li>
+          </ul>
         </div>
       </details>
 
@@ -2480,10 +2481,10 @@
             <li><svg class="mk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Un one-liner qui explique en une phrase qui tu aides et comment</li>
             <li><svg class="mk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Une bio Instagram qui arrête les bonnes personnes dès le premier regard</li>
           </ul>
-          <div class="template-chips">
-            <span class="template-chip">Template : Ma Cliente Idéale</span>
-            <span class="template-chip">Template : Bio Instagram</span>
-          </div>
+          <ul class="template-chips">
+            <li class="template-chip">Template : Ma Cliente Idéale</li>
+            <li class="template-chip">Template : Bio Instagram</li>
+          </ul>
         </div>
       </details>
 
@@ -2503,13 +2504,13 @@
             <li><svg class="mk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Une banque d'idées infinie : plus jamais le vide</li>
             <li><svg class="mk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Du contenu publié, pas parfait, mais qui travaille pour toi</li>
           </ul>
-          <div class="template-chips">
-            <span class="template-chip">Piliers de Contenu</span>
-            <span class="template-chip">Banque de Hooks Prouvés</span>
-            <span class="template-chip">Templates de Scripts</span>
-            <span class="template-chip">Banque d'Idées de Contenu</span>
-            <span class="template-chip">Calendrier de Contenu</span>
-          </div>
+          <ul class="template-chips">
+            <li class="template-chip">Piliers de Contenu</li>
+            <li class="template-chip">Banque de Hooks Prouvés</li>
+            <li class="template-chip">Templates de Scripts</li>
+            <li class="template-chip">Banque d'Idées de Contenu</li>
+            <li class="template-chip">Calendrier de Contenu</li>
+          </ul>
         </div>
       </details>
 
@@ -2528,11 +2529,11 @@
             <li><svg class="mk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Des CTAs clairs pour chaque type de contenu</li>
             <li><svg class="mk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>La confiance de transformer un DM en opportunité réelle</li>
           </ul>
-          <div class="template-chips">
-            <span class="template-chip">Guide de Vente par DM</span>
-            <span class="template-chip">Templates de Scripts de Conversion</span>
-            <span class="template-chip">Templates de CTAs</span>
-          </div>
+          <ul class="template-chips">
+            <li class="template-chip">Guide de Vente par DM</li>
+            <li class="template-chip">Templates de Scripts de Conversion</li>
+            <li class="template-chip">Templates de CTAs</li>
+          </ul>
         </div>
       </details>
     </div>
