@@ -1529,6 +1529,11 @@
   }
   .section-title em{font-style:italic; font-weight:600;}
   .section-title strong{font-style:normal; font-weight:800;}
+  .section-title.editorial{
+    font-style:italic;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+  }
 
   /* ---------- Hero ---------- */
   .hero{padding:64px 0 20px; text-align:center;}
@@ -1724,37 +1729,19 @@
   .module-item{
     position:relative;
     z-index:1;
-    background:rgba(251,248,241,0.05);
-    border:1px solid rgba(251,248,241,0.16);
-    border-radius:16px;
-    overflow:hidden;
+    border-bottom:1px solid rgba(251,248,241,0.16);
   }
-  .module-item + .module-item{margin-top:16px;}
+  .module-item:last-child{border-bottom:none;}
   .module-item summary{
     list-style:none;
     display:flex;
     align-items:center;
     justify-content:space-between;
     gap:20px;
-    padding:26px 28px;
+    padding:24px 4px;
     cursor:pointer;
   }
   .module-item summary::-webkit-details-marker{display:none;}
-  .module-summary-left{
-    display:flex;
-    align-items:center;
-    gap:20px;
-  }
-  .module-num{
-    flex-shrink:0;
-    min-width:40px;
-    font-family:'Playfair Display', serif;
-    font-style:italic;
-    font-weight:600;
-    font-size:28px;
-    line-height:1;
-    color:#9FB3A6;
-  }
   .module-item h3{
     font-family:'Playfair Display', serif;
     font-weight:600;
@@ -1770,7 +1757,7 @@
   }
   .module-item[open] .module-chevron{transform:rotate(180deg);}
   .module-body{
-    padding:0 28px 30px 88px;
+    padding:0 4px 28px;
   }
   .module-list{list-style:none; margin-bottom:22px;}
   .module-list li{
@@ -2442,15 +2429,12 @@
 <!-- MODULES -->
 <section>
   <div class="container-narrow">
-    <h2 class="section-title" style="margin-bottom:44px;">Ce que tu construis</h2>
+    <h2 class="section-title editorial" style="margin-bottom:44px;">Ce que tu construis</h2>
 
     <div class="modules-panel">
       <details class="module-item" open>
         <summary>
-          <div class="module-summary-left">
-            <div class="module-num">1</div>
-            <h3>Deviens la femme qu'on reconnaît, qu'on suit et à qui on fait confiance</h3>
-          </div>
+          <h3>Module 1 : Deviens la femme qu'on reconnaît, qu'on suit et à qui on fait confiance</h3>
           <svg class="module-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </summary>
         <div class="module-body">
@@ -2468,10 +2452,7 @@
 
       <details class="module-item">
         <summary>
-          <div class="module-summary-left">
-            <div class="module-num">2</div>
-            <h3>Identifie ta cliente et parle-lui si bien qu'elle ne peut pas t'ignorer</h3>
-          </div>
+          <h3>Module 2 : Identifie ta cliente et parle-lui si bien qu'elle ne peut pas t'ignorer</h3>
           <svg class="module-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </summary>
         <div class="module-body">
@@ -2490,10 +2471,7 @@
 
       <details class="module-item">
         <summary>
-          <div class="module-summary-left">
-            <div class="module-num">3</div>
-            <h3>Publie du contenu qui attire et convertit, sans te battre contre toi-même chaque semaine</h3>
-          </div>
+          <h3>Module 3 : Publie du contenu qui attire et convertit, sans te battre contre toi-même chaque semaine</h3>
           <svg class="module-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </summary>
         <div class="module-body">
@@ -2516,10 +2494,7 @@
 
       <details class="module-item">
         <summary>
-          <div class="module-summary-left">
-            <div class="module-num">4</div>
-            <h3>Transforme ta présence en premières clientes</h3>
-          </div>
+          <h3>Module 4 : Transforme ta présence en premières clientes</h3>
           <svg class="module-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </summary>
         <div class="module-body">
