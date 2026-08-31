@@ -149,22 +149,46 @@ async function subscribeToBrevo(env, { nom, email, tel }) {
     throw new Error("Brevo env vars not configured");
   }
 
-  const res = await fetch("https://api.brevo.com/v3/contacts", {
+  const buildBody = (includePhone) => ({
+    email: email,
+    attributes: {
+      [env.BREVO_FIRSTNAME_KEY || "FIRSTNAME"]: nom,
+      ...(includePhone ? { SMS: tel || "" } : {})
+    },
+    listIds: [parseInt(env.BREVO_LIST_ID, 10)],
+    updateEnabled: true
+  });
+
+  const postContact = (body) => fetch("https://api.brevo.com/v3/contacts", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "api-key": env.BREVO_API_KEY
     },
-    body: JSON.stringify({
-      email: email,
-      attributes: {
-        [env.BREVO_FIRSTNAME_KEY || "FIRSTNAME"]: nom,
-        SMS: tel || ""
-      },
-      listIds: [parseInt(env.BREVO_LIST_ID, 10)],
-      updateEnabled: true
-    })
+    body: JSON.stringify(body)
   });
+
+  let res = await postContact(buildBody(true));
+
+  if (!res.ok && res.status === 400) {
+    const errText = await res.text();
+    if (errText.includes("duplicate_parameter") && errText.includes("SMS")) {
+      // This phone number is already attached to a different Brevo
+      // contact (a shared phone, a re-registration under a new email,
+      // etc). Brevo enforces phone numbers as unique account-wide, and
+      // updateEnabled doesn't help here since the conflict isn't on the
+      // email we're keying by — it hard-rejects the whole write. Retry
+      // once without the phone so the person still lands on the list;
+      // logPhoneConflict below flags it for manual follow-up since the
+      // phone number itself didn't get saved this time.
+      res = await postContact(buildBody(false));
+      if (res.ok && tel) {
+        await logPhoneConflict(env, { nom, email, tel });
+      }
+    } else {
+      throw new Error(`Brevo ${res.status}: ${errText}`);
+    }
+  }
 
   if (res.ok) {
     // Brevo returns 204 No Content (empty body) when updateEnabled
@@ -212,6 +236,26 @@ async function logFailure(env, details) {
   const key = `failed:${Date.now()}:${details.email}`;
   try {
     await env.FAILED_SUBSCRIBERS.put(key, JSON.stringify(details));
+  } catch (e) {
+    // Nothing more we can do server-side at this point.
+  }
+}
+
+// Writes a successful-but-phoneless Brevo registration to the same KV,
+// under a "conflict:" prefix instead of "failed:" — this person is not
+// a failure, they landed on the list, but Brevo rejected their phone
+// number because it's already attached to a different contact. Kept
+// separate from real failures so Gracia can find and manually
+// reconcile just these, per Brevo's guidance (see conversation).
+async function logPhoneConflict(env, details) {
+  if (!env.FAILED_SUBSCRIBERS) return;
+  const key = `conflict:${Date.now()}:${details.email}`;
+  try {
+    await env.FAILED_SUBSCRIBERS.put(key, JSON.stringify({
+      ...details,
+      reason: "phone_already_claimed_by_another_contact",
+      at: new Date().toISOString()
+    }));
   } catch (e) {
     // Nothing more we can do server-side at this point.
   }
