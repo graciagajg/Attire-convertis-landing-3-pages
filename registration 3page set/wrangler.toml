@@ -12,7 +12,7 @@ id = "4d299c70fbc5415abba3cfd8b0eb2fee"
 
 [[kv_namespaces]]
 binding = "CHECKOUT_LEADS"
-id = "257ae505c96c4d47bc74c3ffdc3122e7"
+id = "c61c56e31fa84bedb731ec8ebce925d4"
 
 [vars]
 BREVO_LIST_ID = "10"
