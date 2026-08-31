@@ -271,7 +271,7 @@
   .calendar-dropdown{position:relative;}
   .calendar-menu{
     display:none;
-    position:fixed;
+    position:absolute;
     flex-direction:column;
     gap:2px;
     background:var(--cream);
@@ -548,10 +548,14 @@
     calendarMenu.classList.add("open");
     const rect = calendarToggle.getBoundingClientRect();
     const menuWidth = calendarMenu.offsetWidth;
-    calendarMenu.style.top = (rect.bottom + 10) + "px";
+    // Document coordinates (viewport rect + current scroll offset), not
+    // viewport coordinates — with position:absolute this makes the menu
+    // scroll together with the page instead of staying glued to one
+    // spot on screen while the button it's anchored to scrolls away.
+    calendarMenu.style.top = (rect.bottom + window.scrollY + 10) + "px";
     calendarMenu.style.left = Math.max(12, Math.min(
       window.innerWidth - menuWidth - 12,
-      rect.left + rect.width / 2 - menuWidth / 2
+      rect.left + window.scrollX + rect.width / 2 - menuWidth / 2
     )) + "px";
     calendarToggle.setAttribute("aria-expanded", "true");
   }
