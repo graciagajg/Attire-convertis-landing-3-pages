@@ -149,46 +149,23 @@ async function subscribeToBrevo(env, { nom, email, tel }) {
     throw new Error("Brevo env vars not configured");
   }
 
-  const buildBody = (includePhone) => ({
-    email: email,
-    attributes: {
-      [env.BREVO_FIRSTNAME_KEY || "FIRSTNAME"]: nom,
-      ...(includePhone ? { SMS: tel || "" } : {})
-    },
-    listIds: [parseInt(env.BREVO_LIST_ID, 10)],
-    updateEnabled: true
-  });
+  const listIds = [parseInt(env.BREVO_LIST_ID, 10)];
+  const firstNameKey = env.BREVO_FIRSTNAME_KEY || "FIRSTNAME";
+  const headers = {
+    "Content-Type": "application/json",
+    "api-key": env.BREVO_API_KEY
+  };
 
-  const postContact = (body) => fetch("https://api.brevo.com/v3/contacts", {
+  const res = await fetch("https://api.brevo.com/v3/contacts", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "api-key": env.BREVO_API_KEY
-    },
-    body: JSON.stringify(body)
+    headers,
+    body: JSON.stringify({
+      email,
+      attributes: { [firstNameKey]: nom, SMS: tel || "" },
+      listIds,
+      updateEnabled: true
+    })
   });
-
-  let res = await postContact(buildBody(true));
-
-  if (!res.ok && res.status === 400) {
-    const errText = await res.text();
-    if (errText.includes("duplicate_parameter") && errText.includes("SMS")) {
-      // This phone number is already attached to a different Brevo
-      // contact (a shared phone, a re-registration under a new email,
-      // etc). Brevo enforces phone numbers as unique account-wide, and
-      // updateEnabled doesn't help here since the conflict isn't on the
-      // email we're keying by — it hard-rejects the whole write. Retry
-      // once without the phone so the person still lands on the list;
-      // logPhoneConflict below flags it for manual follow-up since the
-      // phone number itself didn't get saved this time.
-      res = await postContact(buildBody(false));
-      if (res.ok && tel) {
-        await logPhoneConflict(env, { nom, email, tel });
-      }
-    } else {
-      throw new Error(`Brevo ${res.status}: ${errText}`);
-    }
-  }
 
   if (res.ok) {
     // Brevo returns 204 No Content (empty body) when updateEnabled
@@ -201,6 +178,62 @@ async function subscribeToBrevo(env, { nom, email, tel }) {
   }
 
   const errText = await res.text();
+
+  if (res.status === 400 && errText.includes("duplicate_parameter") && errText.includes("SMS") && tel) {
+    // This phone number already belongs to a different Brevo contact
+    // than the one matching this email — most often a returning
+    // registrant using a new email this time. updateEnabled can't
+    // resolve this: it only dedupes on the identifier we keyed the
+    // request by (email), not on a second unique field someone else
+    // already owns. So look that contact up directly by phone instead
+    // of trying (and failing) to create a disconnected second record —
+    // this is what keeps the phone number attached for the SMS list.
+    return updateBrevoContactByPhone(env, { nom, email, tel, listIds, firstNameKey, headers });
+  }
+
+  throw new Error(`Brevo ${res.status}: ${errText}`);
+}
+
+// Reunites a returning registrant with their existing Brevo contact by
+// looking it up via phone number (identifierType=phone_id) instead of
+// email, then updating that contact's email/name/list membership.
+async function updateBrevoContactByPhone(env, { nom, email, tel, listIds, firstNameKey, headers }) {
+  const phonePath = encodeURIComponent(tel);
+  const url = `https://api.brevo.com/v3/contacts/${phonePath}?identifierType=phone_id`;
+
+  const res = await fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ email, attributes: { [firstNameKey]: nom }, listIds })
+  });
+
+  if (res.ok) return null; // Brevo's contact-update endpoint always returns 204.
+
+  const errText = await res.text();
+
+  if (res.status === 400 && errText.includes("duplicate_parameter") && errText.includes("EMAIL")) {
+    // Rare double-collision: the new email also already belongs to a
+    // third, unrelated contact. Update the phone-owning contact's name
+    // and list without touching email, and flag it for a manual look
+    // rather than losing the registration entirely.
+    const retry = await fetch(url, {
+      method: "PUT",
+      headers,
+      body: JSON.stringify({ attributes: { [firstNameKey]: nom }, listIds })
+    });
+
+    if (retry.ok) {
+      await logManualReviewNote(env, {
+        nom, email, tel,
+        reason: "email_also_claimed_by_another_contact"
+      });
+      return null;
+    }
+
+    const retryErr = await retry.text();
+    throw new Error(`Brevo ${retry.status}: ${retryErr}`);
+  }
+
   throw new Error(`Brevo ${res.status}: ${errText}`);
 }
 
@@ -241,19 +274,18 @@ async function logFailure(env, details) {
   }
 }
 
-// Writes a successful-but-phoneless Brevo registration to the same KV,
-// under a "conflict:" prefix instead of "failed:" — this person is not
-// a failure, they landed on the list, but Brevo rejected their phone
-// number because it's already attached to a different contact. Kept
-// separate from real failures so Gracia can find and manually
-// reconcile just these, per Brevo's guidance (see conversation).
-async function logPhoneConflict(env, details) {
+// Writes a note to the same KV under a "conflict:" prefix instead of
+// "failed:" — for a registration that succeeded (person landed on the
+// list) but needs a manual look, rather than a real failure. Currently
+// used only for the rare double-collision in updateBrevoContactByPhone
+// (their phone AND their new email each already belong to someone
+// else), since the common phone-reunite case now resolves on its own.
+async function logManualReviewNote(env, details) {
   if (!env.FAILED_SUBSCRIBERS) return;
   const key = `conflict:${Date.now()}:${details.email}`;
   try {
     await env.FAILED_SUBSCRIBERS.put(key, JSON.stringify({
       ...details,
-      reason: "phone_already_claimed_by_another_contact",
       at: new Date().toISOString()
     }));
   } catch (e) {
