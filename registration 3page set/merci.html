@@ -274,13 +274,48 @@
     font-size:14.5px;
     white-space:nowrap;
   }
-  .gcal-link{
-    font-size:12px;
-    color:rgba(251,248,241,0.6);
-    text-decoration:underline;
-    text-underline-offset:3px;
+
+  /* ---------- Add-to-calendar dropdown (custom, no library) ---------- */
+  .calendar-dropdown{position:relative;}
+  .calendar-menu{
+    display:none;
+    position:fixed;
+    flex-direction:column;
+    gap:2px;
+    background:var(--cream);
+    border-radius:14px;
+    box-shadow:var(--shadow-soft);
+    padding:8px;
+    min-width:210px;
+    z-index:20;
   }
-  .gcal-link:hover{color:var(--cream);}
+  .calendar-menu.open{display:flex;}
+  .calendar-option{
+    display:block;
+    width:100%;
+    text-align:left;
+    background:none;
+    border:none;
+    border-radius:10px;
+    padding:11px 14px;
+    font-family:'Nunito Sans', sans-serif;
+    font-weight:700;
+    font-size:14px;
+    color:var(--forest);
+    cursor:pointer;
+  }
+  .calendar-option:hover{background:var(--cream-soft);}
+
+  /* ---------- Glow pulse (draws the eye without needing hover) ---------- */
+  @keyframes glow-pulse{
+    0%   { box-shadow:0 0 0 0 rgba(232,180,99,0.55); }
+    70%  { box-shadow:0 0 0 12px rgba(232,180,99,0); }
+    100% { box-shadow:0 0 0 0 rgba(232,180,99,0); }
+  }
+  .btn.glow{ animation:glow-pulse 2.4s ease-out infinite; }
+  @media (prefers-reduced-motion: reduce){
+    .btn.glow{ animation:none; }
+  }
 
   .step-content{
     display:flex;
@@ -371,22 +406,14 @@
         </div>
       </div>
       <div class="step-action">
-        <button class="btn on-dark" id="add-to-calendar">Ajouter au calendrier (Apple)</button>
-        <a href="#" class="gcal-link" id="gcal-link" target="_blank" rel="noopener">ou ajoute-le à Google Calendar</a>
-        <a href="#" class="gcal-link" id="outlook-link" target="_blank" rel="noopener">ou ajoute-le à Outlook</a>
-        <a href="#" class="gcal-link" id="yahoo-link" target="_blank" rel="noopener">ou ajoute-le à Yahoo Calendar</a>
-      </div>
-    </div>
-
-    <div class="step-card">
-      <div class="step-content">
-        <div class="step-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7 10-7"/></svg>
-        </div>
-        <div>
-          <span class="step-label">Étape 2</span>
-          <h3>Vérifie ta boîte de réception</h3>
-          <p>Si tu ne vois rien dans ta boîte principale, regarde dans tes spams ou promotions, et déplace l'email pour ne rien manquer.</p>
+        <div class="calendar-dropdown">
+          <button class="btn on-dark glow" id="calendar-toggle" type="button" aria-haspopup="true" aria-expanded="false">Ajouter au calendrier</button>
+          <div class="calendar-menu" id="calendar-menu">
+            <button type="button" class="calendar-option" id="add-to-calendar">Apple Calendar</button>
+            <a href="#" class="calendar-option" id="gcal-link" target="_blank" rel="noopener">Google Calendar</a>
+            <a href="#" class="calendar-option" id="outlook-link" target="_blank" rel="noopener">Outlook</a>
+            <a href="#" class="calendar-option" id="yahoo-link" target="_blank" rel="noopener">Yahoo Calendar</a>
+          </div>
         </div>
       </div>
     </div>
@@ -397,13 +424,26 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2Z"/><path d="M8.5 8.5c0 4 3 7 7 7"/></svg>
         </div>
         <div>
-          <span class="step-label">Étape 3</span>
+          <span class="step-label">Étape 2</span>
           <h3>Rejoins le groupe WhatsApp</h3>
           <p>C'est là que je partage les rappels et les mises à jour de dernière minute avant la masterclass.</p>
         </div>
       </div>
       <div class="step-action">
-        <a href="https://chat.whatsapp.com/HIQxUtizMPm6FLE4TRwmYw?s=cl&amp;p=i&amp;mlu=4" class="btn on-dark" target="_blank" rel="noopener">Rejoindre le groupe</a>
+        <a href="https://chat.whatsapp.com/HIQxUtizMPm6FLE4TRwmYw?s=cl&amp;p=i&amp;mlu=4" class="btn on-dark glow" target="_blank" rel="noopener">Rejoindre le groupe</a>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-content">
+        <div class="step-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7 10-7"/></svg>
+        </div>
+        <div>
+          <span class="step-label">Étape 3</span>
+          <h3>Vérifie ta boîte de réception</h3>
+          <p>Si tu ne vois rien dans ta boîte principale, regarde dans tes spams ou promotions, et déplace l'email pour ne rien manquer.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -475,6 +515,7 @@
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+    closeCalendarMenu();
   });
 
   // Google Calendar quick-add link (opens in new tab)
@@ -504,6 +545,53 @@
     + "&desc=" + encodeURIComponent(EVENT_DESC)
     + "&in_loc=" + encodeURIComponent(EVENT_LOCATION);
   document.getElementById("yahoo-link").href = yahooUrl;
+
+  // ---------- Calendar dropdown open/close (custom, no library) ----------
+  // position:fixed + coordinates computed here, rather than a CSS-only
+  // popover, so the menu can never get clipped by an ancestor's
+  // overflow:hidden (the steps panel uses that for a decorative blob).
+  const calendarToggle = document.getElementById("calendar-toggle");
+  const calendarMenu = document.getElementById("calendar-menu");
+
+  function openCalendarMenu(){
+    calendarMenu.classList.add("open");
+    const rect = calendarToggle.getBoundingClientRect();
+    const menuWidth = calendarMenu.offsetWidth;
+    calendarMenu.style.top = (rect.bottom + 10) + "px";
+    calendarMenu.style.left = Math.max(12, Math.min(
+      window.innerWidth - menuWidth - 12,
+      rect.left + rect.width / 2 - menuWidth / 2
+    )) + "px";
+    calendarToggle.setAttribute("aria-expanded", "true");
+  }
+
+  function closeCalendarMenu(){
+    calendarMenu.classList.remove("open");
+    calendarToggle.setAttribute("aria-expanded", "false");
+  }
+
+  calendarToggle.addEventListener("click", function(e){
+    e.stopPropagation();
+    if(calendarMenu.classList.contains("open")){
+      closeCalendarMenu();
+    } else {
+      openCalendarMenu();
+    }
+  });
+
+  document.querySelectorAll(".calendar-option[href]").forEach(function(link){
+    link.addEventListener("click", closeCalendarMenu);
+  });
+
+  document.addEventListener("click", function(e){
+    if(calendarMenu.classList.contains("open") && !calendarMenu.contains(e.target) && e.target !== calendarToggle){
+      closeCalendarMenu();
+    }
+  });
+
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape") closeCalendarMenu();
+  });
 </script>
 
 </body>
