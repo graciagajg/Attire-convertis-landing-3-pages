@@ -174,16 +174,14 @@
     color:var(--forest);
     line-height:1.45;
   }
-  .zoom-note{
-    text-align:center;
-    font-family:'Nunito Sans', sans-serif;
-    font-weight:500;
-    font-size:18px;
-    color:#2C3E37;
-    max-width:560px;
-    margin:0 auto 50px;
-    line-height:1.55;
+  .down-arrows{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-top:14px;
+    color:var(--sage);
   }
+  .down-arrows svg + svg{margin-top:-10px;}
 
   /* ---------- Transition line ---------- */
   .transition{
@@ -380,9 +378,12 @@
   <p class="video-note">Petit message de ma part</p>
 
   <div class="confirm-box">
-    <p>Tu es officiellement inscrite à <strong>ma masterclass</strong>, le mercredi 9 septembre à 14h00 (heure de Montréal).</p>
+    <p>Félicitations, tu as presque terminé ton inscription !</p>
+    <div class="down-arrows" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+    </div>
   </div>
-  <p class="zoom-note">Je viens de t'envoyer un email avec le lien Zoom. Vérifie ta boîte de réception pour garder ta place.</p>
 
   <p class="transition">Complète ces 3 étapes pour finaliser ton inscription.</p>
 
