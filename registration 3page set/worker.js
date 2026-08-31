@@ -166,7 +166,15 @@ async function subscribeToBrevo(env, { nom, email, tel }) {
     })
   });
 
-  if (res.ok) return res.json();
+  if (res.ok) {
+    // Brevo returns 204 No Content (empty body) when updateEnabled
+    // updates a contact that already existed, vs 201 with a JSON body
+    // for a brand-new contact — only parse JSON when there's a body,
+    // or res.json() throws on the empty response and this gets
+    // miscounted as a failure even though Brevo succeeded.
+    if (res.status === 204) return null;
+    return res.json();
+  }
 
   const errText = await res.text();
   throw new Error(`Brevo ${res.status}: ${errText}`);
