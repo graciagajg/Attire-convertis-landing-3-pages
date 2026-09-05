@@ -1896,7 +1896,7 @@
   /* ---------- Pricing + CTA ---------- */
   .pricing-grid{
     display:grid;
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:1.1fr 0.9fr;
     gap:32px;
     max-width:1000px;
     margin:0 auto;
@@ -1909,6 +1909,12 @@
     text-align:center;
     position:relative;
     overflow:hidden;
+  }
+  .price-card.smaller{
+    padding:48px 40px;
+  }
+  .price-card.smaller .price-amount{
+    font-size:clamp(38px, 5.5vw, 54px);
   }
   .price-card::before{
     content:"";
@@ -2628,25 +2634,6 @@
     <div class="pricing-grid">
 
       <div class="price-card">
-        <h2 class="section-title">Rejoins Attire &amp; Convertis Base</h2>
-        <div class="price-amount">97€</div>
-        <ul class="price-includes">
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>4 semaines de programme, étape par étape</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Une trajectoire complète : de ton identité jusqu'à tes premières clientes</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Tous les templates et banques de ressources inclus. Tu ne repars jamais les mains vides</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><strong>2 mois</strong> d'accès à tout le contenu</li>
-          <li class="excluded"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>Appels en direct chaque semaine, avec moi</li>
-          <li class="excluded"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>Audits de ton contenu chaque semaine</li>
-          <li class="excluded"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>Accès à une communauté d'entrepreneures</li>
-        </ul>
-
-        <div class="btn-wrap">
-          <a href="#" class="btn glow" id="cta-whop-base">Je rejoins Attire &amp; Convertis Base</a>
-          <span class="btn-note">Paiement sécurisé via Whop.</span>
-        </div>
-      </div>
-
-      <div class="price-card">
         <span class="price-limited">Places limitées</span>
         <h2 class="section-title">Rejoins Attire &amp; Convertis VIP</h2>
         <div class="price-amount">225€</div>
@@ -2673,6 +2660,25 @@
 
         <div class="btn-wrap">
           <a href="#" class="btn glow" id="cta-whop-vip">Je rejoins Attire &amp; Convertis VIP</a>
+          <span class="btn-note">Paiement sécurisé via Whop.</span>
+        </div>
+      </div>
+
+      <div class="price-card smaller">
+        <h2 class="section-title">Rejoins Attire &amp; Convertis Base</h2>
+        <div class="price-amount">97€</div>
+        <ul class="price-includes">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>4 semaines de programme, étape par étape</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Une trajectoire complète : de ton identité jusqu'à tes premières clientes</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Tous les templates et banques de ressources inclus. Tu ne repars jamais les mains vides</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><strong>2 mois</strong> d'accès à tout le contenu</li>
+          <li class="excluded"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>Appels en direct chaque semaine, avec moi</li>
+          <li class="excluded"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>Audits de ton contenu chaque semaine</li>
+          <li class="excluded"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>Accès à une communauté d'entrepreneures</li>
+        </ul>
+
+        <div class="btn-wrap">
+          <a href="#" class="btn glow" id="cta-whop-base">Je rejoins Attire &amp; Convertis Base</a>
           <span class="btn-note">Paiement sécurisé via Whop.</span>
         </div>
       </div>
