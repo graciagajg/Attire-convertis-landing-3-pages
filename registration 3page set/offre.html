@@ -1894,13 +1894,19 @@
   .qual-block.yes .qual-text p{color:rgba(251,248,241,0.72);}
 
   /* ---------- Pricing + CTA ---------- */
+  .pricing-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:32px;
+    max-width:1000px;
+    margin:0 auto;
+    align-items:start;
+  }
   .price-card{
     background:var(--forest);
     border-radius:22px;
     padding:64px 56px;
     text-align:center;
-    max-width:760px;
-    margin:0 auto;
     position:relative;
     overflow:hidden;
   }
@@ -1953,6 +1959,8 @@
   }
   .price-includes li:last-child{border-bottom:none;}
   .price-includes svg{flex-shrink:0; color:var(--cream); margin-top:3px;}
+  .price-includes li.excluded{color:rgba(251,248,241,0.5);}
+  .price-includes li.excluded svg{color:#C1666B;}
 
   .payment-toggle{
     display:flex;
@@ -2223,6 +2231,7 @@
     .qual-grid{grid-template-columns:1fr;}
     .qual-block{padding:40px 26px;}
     .logi-panel{padding:44px 24px;}
+    .pricing-grid{grid-template-columns:1fr;}
     .price-card{padding:48px 28px;}
     .pathway-block{padding:40px 26px;}
     .pathway-row{flex-direction:column; align-items:stretch; gap:16px;}
@@ -2616,34 +2625,58 @@
 <!-- PRICE + CTA -->
 <section id="prix">
   <div class="container">
-    <div class="price-card">
-      <span class="price-limited">Places limitées</span>
-      <h2 class="section-title">Rejoins Attire &amp; Convertis</h2>
-      <div class="price-amount">225€</div>
-      <ul class="price-includes">
-        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Les 4 modules complets (Identité, Cliente Idéale, Contenu, Conversion)</li>
-        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Tous les templates et banques de ressources</li>
-        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Appels en direct chaque semaine avec moi</li>
-        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Audits de contenu chaque semaine</li>
-        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Accès à vie</li>
-        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Accès à la communauté</li>
-      </ul>
+    <div class="pricing-grid">
 
-      <div class="payment-toggle">
-        <div class="pay-option active" id="pay-full" onclick="selectPayment('full')">
-          <span class="po-label">Paiement complet</span>
-          <span class="po-amount">225€</span>
-        </div>
-        <div class="pay-option" id="pay-split" onclick="selectPayment('split')">
-          <span class="po-label">En 2 fois</span>
-          <span class="po-amount">112,50€ × 2</span>
+      <div class="price-card">
+        <h2 class="section-title">Rejoins Attire &amp; Convertis Base</h2>
+        <div class="price-amount">97€</div>
+        <ul class="price-includes">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>4 semaines de programme, étape par étape</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Une trajectoire complète : de ton identité jusqu'à tes premières clientes</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Tous les templates et banques de ressources inclus. Tu ne repars jamais les mains vides</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><strong>2 mois</strong> d'accès à tout le contenu</li>
+          <li class="excluded"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>Appels en direct chaque semaine, avec moi</li>
+          <li class="excluded"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>Audits de ton contenu chaque semaine</li>
+          <li class="excluded"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>Accès à une communauté d'entrepreneures</li>
+        </ul>
+
+        <div class="btn-wrap">
+          <a href="#" class="btn glow" id="cta-whop-base">Je rejoins Attire &amp; Convertis Base</a>
+          <span class="btn-note">Paiement sécurisé via Whop.</span>
         </div>
       </div>
 
-      <div class="btn-wrap">
-        <a href="#" class="btn glow" id="cta-whop">Je rejoins Attire &amp; Convertis</a>
-        <span class="btn-note">Paiement sécurisé via Whop.</span>
+      <div class="price-card">
+        <span class="price-limited">Places limitées</span>
+        <h2 class="section-title">Rejoins Attire &amp; Convertis VIP</h2>
+        <div class="price-amount">225€</div>
+        <ul class="price-includes">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>4 semaines de programme, étape par étape</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Une trajectoire complète : de ton identité jusqu'à tes premières clientes</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Tous les templates et banques de ressources inclus. Tu ne repars jamais les mains vides</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Appels en direct chaque semaine, avec moi</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Audits de ton contenu chaque semaine</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><strong>6 mois</strong> d'accès à tout le contenu</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Accès à une communauté d'entrepreneures</li>
+        </ul>
+
+        <div class="payment-toggle">
+          <div class="pay-option active" id="pay-full" onclick="selectPayment('vip-full')">
+            <span class="po-label">Paiement complet</span>
+            <span class="po-amount">225€</span>
+          </div>
+          <div class="pay-option" id="pay-split" onclick="selectPayment('vip-split')">
+            <span class="po-label">En 2 fois</span>
+            <span class="po-amount">112,50€ × 2</span>
+          </div>
+        </div>
+
+        <div class="btn-wrap">
+          <a href="#" class="btn glow" id="cta-whop-vip">Je rejoins Attire &amp; Convertis VIP</a>
+          <span class="btn-note">Paiement sécurisé via Whop.</span>
+        </div>
       </div>
+
     </div>
   </div>
 </section>
@@ -2774,25 +2807,35 @@
   setInterval(updateCohortCountdown, 1000);
 
   // ---------- Payment plan toggle -> Whop checkout links ----------
-  const WHOP_CHECKOUT_FULL = "https://whop.com/checkout/plan_hAnJiJjAcPOwx";
-  const WHOP_CHECKOUT_SPLIT = "https://whop.com/checkout/plan_hNU5ioCS2Jp0n";
+  // Three possible plans now instead of two: VIP's own toggle still
+  // picks between vip-full/vip-split, Base has a single flat price and
+  // sets its plan directly on click (no toggle needed).
+  const WHOP_CHECKOUT = {
+    "vip-full": "https://whop.com/checkout/plan_hAnJiJjAcPOwx",
+    "vip-split": "https://whop.com/checkout/plan_hNU5ioCS2Jp0n",
+    "base": "https://whop.com/checkout/plan_FExmdLSAFqiw9"
+  };
+  const MODAL_LABELS = {
+    "vip-full": "Paiement complet : 225€",
+    "vip-split": "En 2 fois : 112,50€ × 2",
+    "base": "Paiement complet : 97€"
+  };
 
-  let selectedPlan = "full";
+  let selectedPlan = "vip-full";
   function selectPayment(plan){
     selectedPlan = plan;
-    document.getElementById("pay-full").classList.toggle("active", plan === "full");
-    document.getElementById("pay-split").classList.toggle("active", plan === "split");
-    const url = plan === "full" ? WHOP_CHECKOUT_FULL : WHOP_CHECKOUT_SPLIT;
-    document.getElementById("cta-whop").href = url || "#";
+    document.getElementById("pay-full").classList.toggle("active", plan === "vip-full");
+    document.getElementById("pay-split").classList.toggle("active", plan === "vip-split");
+    document.getElementById("cta-whop-vip").href = WHOP_CHECKOUT[plan] || "#";
   }
-  selectPayment("full");
+  selectPayment("vip-full");
 
   // ---------- Signup modal (name, email, phone, consent -> redirect to Whop) ----------
   const modal = document.getElementById("signup-modal");
   const modalPlanLabel = document.getElementById("modal-plan-label");
 
   function openSignupModal(){
-    modalPlanLabel.textContent = selectedPlan === "full" ? "Paiement complet : 225€" : "En 2 fois : 112,50€ × 2";
+    modalPlanLabel.textContent = MODAL_LABELS[selectedPlan];
     modal.classList.add("open");
     document.body.style.overflow = "hidden";
   }
@@ -2801,8 +2844,13 @@
     document.body.style.overflow = "";
   }
 
-  document.getElementById("cta-whop").addEventListener("click", function(e){
+  document.getElementById("cta-whop-vip").addEventListener("click", function(e){
     e.preventDefault();
+    openSignupModal();
+  });
+  document.getElementById("cta-whop-base").addEventListener("click", function(e){
+    e.preventDefault();
+    selectedPlan = "base";
     openSignupModal();
   });
   document.getElementById("modal-close").addEventListener("click", closeSignupModal);
@@ -2834,7 +2882,7 @@
         }
       }
     }
-    const url = selectedPlan === "full" ? WHOP_CHECKOUT_FULL : WHOP_CHECKOUT_SPLIT;
+    const url = WHOP_CHECKOUT[selectedPlan];
     if(!url){
       alert("Lien de paiement Whop à venir : ajoute l'URL de checkout dans le code une fois le produit configuré sur Whop.");
       return;
