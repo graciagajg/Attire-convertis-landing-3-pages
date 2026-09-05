@@ -1911,7 +1911,8 @@
     overflow:hidden;
   }
   .price-card.smaller{
-    background:#4C6D65;
+    background:#415A54;
+    border:1px solid var(--forest-deep);
     padding:48px 40px;
   }
   .price-card.smaller .price-amount{
@@ -1924,6 +1925,9 @@
     width:320px; height:320px;
     border-radius:50%;
     background:radial-gradient(circle, rgba(63,77,64,0.5), transparent 70%);
+  }
+  .price-card.smaller::before{
+    content:none;
   }
   .price-card > *{position:relative; z-index:1;}
   .price-card .section-title{
